@@ -1,0 +1,9 @@
+<template name="Dashboard">
+  <h1>Dashboard</h1>
+
+  <ul>
+    {{#each services}}
+      <li><a class="{{id}} service" href="#">{{name}}</a></li>
+    {{/each}}
+  </ul>
+</template>

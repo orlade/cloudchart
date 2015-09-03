@@ -1,0 +1,22 @@
+<template name="ecs">
+  <h1>AWS ECS</h1>
+
+  <h2>Clusters</h2>
+  <ul>
+    {{#each clusters}}
+      <li>
+        <span class="status {{status}}">{{status}}</span>:
+        <a class="cluster" href="#">{{name}}</a></li>
+    {{/each}}
+  </ul>
+
+  <h2>Task Definitions</h2>
+  <ul>
+    {{#each taskdefs}}
+      <li>
+        <span class="status {{status}}">{{status}}</span>:
+        <a class="taskdef" href="#">{{family}}:{{revision}}</a>
+      </li>
+    {{/each}}
+  </ul>
+</template>

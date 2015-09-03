@@ -1,0 +1,3 @@
+@FabricService = {}
+#  registerTaskDefinition: ->
+#    AWS.

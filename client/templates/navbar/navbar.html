@@ -1,0 +1,17 @@
+<template name="navbar">
+  <div class="ui top secondary pointing menu">
+    <a href="/">
+      <div class="title">
+        <img class="logo" src="/images/logo-small.png"/>
+        <span class="name">Cortex</span>
+      </div>
+    </a>
+
+    <a class="page item {{active 'Dashboard'}}" href="{{pathFor route='Dashboard'}}">Dashboard</a>
+    <!--<a class="page item {{active 'Alerts'}}" href="{{pathFor route='Alerts'}}">Alerts</a>-->
+
+    <div class="right menu">
+      <a class="ui item">Logout</a>
+    </div>
+  </div>
+</template>

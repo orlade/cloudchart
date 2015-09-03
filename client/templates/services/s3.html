@@ -1,0 +1,9 @@
+<template name="s3">
+  <h1>AWS S3</h1>
+
+  <ul>
+    {{#each buckets}}
+      <li><a class="{{Name}}">{{Name}}</a></li>
+    {{/each}}
+  </ul>
+</template>

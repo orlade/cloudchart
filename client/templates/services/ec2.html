@@ -1,0 +1,9 @@
+<template name="ec2">
+  <h1>AWS EC2</h1>
+
+  <ul>
+    {{#each instances}}
+      <li>{{status}}: <a class="instance" href="http://{{ip}}">{{_id}}</a>{{#if spot}} (spot){{/if}}</li>
+    {{/each}}
+  </ul>
+</template>
