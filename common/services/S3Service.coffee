@@ -10,3 +10,4 @@
     Syncer.sync S3Buckets, buckets, true
 
 Object.defineProperty S3Service, 'buckets', get: -> S3Buckets.find()
+Object.defineProperty S3Service, 'count', get: -> S3Buckets.find().count()

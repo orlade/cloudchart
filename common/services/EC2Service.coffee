@@ -23,5 +23,5 @@
 
 #    syncInstances docs
 
-
+Object.defineProperty EC2Service, 'count', get: -> EC2Instances.find().count()
 Object.defineProperty EC2Service, 'instances', get: -> EC2Instances.find()

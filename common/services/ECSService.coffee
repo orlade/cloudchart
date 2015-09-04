@@ -23,3 +23,7 @@ ecs = new AWS.ECS({region: 'ap-southeast-2'}) if Meteor.isServer
 
 Object.defineProperty ECSService, 'clusters', get: -> ECSClusters.find()
 Object.defineProperty ECSService, 'taskdefs', get: -> ECSTaskDefinitions.find()
+
+#Object.defineProperty ECSService, 'services', get: -> _.flatten _.pluck(ECSClusters.find().fetch(),
+
+Object.defineProperty ECSService, 'count', get: -> ECSClusters.find().count()

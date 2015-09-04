@@ -3,7 +3,7 @@
 
   <ul>
     {{#each services}}
-      <li><a class="{{id}} service" href="#">{{name}}</a></li>
+      <li><a class="{{id}} service" href="#">{{name}}</a>{{#if count}} ({{count}}){{/if}}</li>
     {{/each}}
   </ul>
 </template>
