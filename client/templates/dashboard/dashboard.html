@@ -1,6 +1,12 @@
 <template name="Dashboard">
   <h1>Dashboard</h1>
 
+  <div class="ui actions segment">
+    <div class="ui blue labeled icon sync button {{#if syncing}}disabled{{/if}}">
+      <i class="refresh icon"></i> Sync
+    </div>
+  </div>
+
   <ul>
     {{#each services}}
       <li><a class="{{id}} service" href="#">{{name}}</a>{{#if count}} ({{count}}){{/if}}</li>

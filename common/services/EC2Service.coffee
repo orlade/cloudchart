@@ -5,9 +5,6 @@
   sync: ->
     if Meteor.isClient then return console.warn "Cannot sync data from client"
 
-    syncInstances = Meteor.bindEnvironment((docs) -> Syncer.sync EC2Instances, docs, true)
-
-#    console.log new AWS.EC2({region: 'ap-southeast-2'}).describeInstancesSync()
     reservations = new AWS.EC2({region: 'ap-southeast-2'}).describeInstancesSync().Reservations
     docs = for instance in _.flatten _.pluck(reservations, 'Instances')
       _.extend instance,
@@ -17,11 +14,15 @@
         spot: instance.SpotInstanceRequestId
     Syncer.sync EC2Instances, docs, true
 
-    # Spot instances.
-#    spots = new AWS.EC2({region: 'ap-southeast-2'}).describeSpotInstanceRequestsSync()
-#    console.log spots
+Object.defineProperties EC2Service,
+  # The number of EC2 instances.
+  count: get: -> EC2Instances.find().count()
+  # The existing EC2 instances.
+  instances: get: -> EC2Instances.find()
 
-#    syncInstances docs
-
-Object.defineProperty EC2Service, 'count', get: -> EC2Instances.find().count()
-Object.defineProperty EC2Service, 'instances', get: -> EC2Instances.find()
+  # Elastic Load Balancer (ELB) instances.
+  elbs: get: ->
+  # EC2 instance launch configurations.
+  launchConfigs: get: ->
+  # Auto-Scaling Group (ASG) instances.
+  asgs: get: ->

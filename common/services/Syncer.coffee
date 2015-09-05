@@ -21,3 +21,6 @@
     if complete
       count = collection.remove _id: $nin: (_.pluck docs, '_id')
       log if delta > 0 then "Removed #{count} docs" else "Nothing removed"
+
+  # Syncs all service data. If on the client, delegates to the server via a Meteor method.
+  syncAll: -> if Meteor.isServer then AwsSync.sync() else Meteor.call 'sync'

@@ -1,14 +1,14 @@
 <template name="ecs">
   <h1>AWS ECS</h1>
 
-  <h2>Clusters</h2>
-  <ul>
-    {{#each clusters}}
-      <li>
-        <span class="status {{status}}">{{status}}</span>:
-        <a class="cluster" href="#">{{name}}</a></li>
-    {{/each}}
-  </ul>
+  <h2>Actions</h2>
+
+  <div class="ui actions segment">
+    <div class="ui blue labeled icon install button {{#if installing}}disabled{{/if}}"
+         title="Installs the ECS configuration script into the private S3 configuration bucket">
+      <i class="upload icon"></i> Install ECS config
+    </div>
+  </div>
 
   <h2>Task Definitions</h2>
   <ul>
@@ -17,6 +17,30 @@
         <span class="status {{status}}">{{status}}</span>:
         <a class="taskdef" href="#">{{family}}:{{revision}}</a>
       </li>
+    {{else}}
+      <span class="empty">No task definitions.</span>
+    {{/each}}
+  </ul>
+
+  <h2>Services</h2>
+  <ul>
+    {{#each services}}
+      <li>
+        <span class="status {{status}}">{{status}}</span>:
+        <a class="cluster" href="#">{{name}}</a></li>
+    {{else}}
+      <span class="empty">No services.</span>
+    {{/each}}
+  </ul>
+
+  <h2>Clusters</h2>
+  <ul>
+    {{#each clusters}}
+      <li>
+        <span class="status {{status}}">{{status}}</span>:
+        <a class="cluster" href="#">{{name}}</a></li>
+    {{else}}
+      <span class="empty">No clusters.</span>
     {{/each}}
   </ul>
 </template>

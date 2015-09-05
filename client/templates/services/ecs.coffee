@@ -1,3 +1,9 @@
 Template.ecs.helpers
-  clusters: -> ECSService.clusters
+  installing: -> State.ecsConfigInstalling
+
   taskdefs: -> ECSService.taskdefs
+  services: -> ECSService.services
+  clusters: -> ECSService.clusters
+
+Template.ecs.events
+  'click .install.button': (e) -> Meteor.call 'ecs/config/install'

@@ -6,4 +6,10 @@ Meteor.startup ->
 
 @AwsSync =
   services: [S3Service, EC2Service, ECSService]
-  sync: -> s.sync() for s in @services
+  sync: ->
+    State.syncing = true
+    s.sync() for s in @services
+    State.syncing = false
+
+Meteor.methods
+  sync: -> Syncer.syncAll()
