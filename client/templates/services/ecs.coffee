@@ -11,7 +11,7 @@ Template.ecs.helpers
   taskUrl: -> "#{ECS_ROOT_URL}#/clusters/default/tasks/#{@_id.split('/')[1]}"
 
 Template.ecs.events
-  'click .install.button': (e) -> Meteor.call 'ecs/config/install'
+  'click .install.button': -> Meteor.call 'ecs/config/install'
 
   'click .scale.down.button': -> ECSService.scale @_id, @desiredCount - 1
   'click .scale.up.button': -> ECSService.scale @_id, @desiredCount + 1

@@ -1,9 +1,5 @@
 node_modules/
-lib/
 docs/
-*.idea
-*.sublime-workspace
-*.sublime-project
 
 # Compiled source #
 ###################
@@ -62,3 +58,5 @@ bin/
 #######
 .settings
 .idea
+*.sublime-workspace
+*.sublime-project
