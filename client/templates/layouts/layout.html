@@ -4,12 +4,15 @@
 </head>
 
 <template name="ApplicationLayout">
-  <header>
-    {{> yield "header"}}
-  </header>
+  <div id="wrap">
+    <header>
+      {{> yield "header"}}
+    </header>
 
-  <div class="content">
-    {{> yield}}
+
+    <div class="content">
+      {{> yield}}
+    </div>
   </div>
 
   <footer>

@@ -1,0 +1,37 @@
+// From http://www.adhamdannaway.com/blog/web-design/css-sticky-footer-sticks-your-footer-to-the-bottom-of-the-page
+@footerHeight: 24px;
+
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: @footerHeight;
+}
+
+footer {
+  color: grey;
+  text-align: center;
+
+  // Sticky logic.
+  position: relative;
+  margin-top: -@footerHeight;
+  height: @footerHeight;
+  clear: both;
+}
+
+/*Opera Fix*/
+body:before {
+  content: "";
+  height: 100%;
+  float: left;
+  width: 0;
+  margin-top: -32767px;
+}
