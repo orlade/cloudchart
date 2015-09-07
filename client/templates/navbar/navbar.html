@@ -11,6 +11,12 @@
     <!--<a class="page item {{active 'Alerts'}}" href="{{pathFor route='Alerts'}}">Alerts</a>-->
 
     <div class="right menu">
+      <div class="ui item">
+        <div class="ui blue labeled icon sync button {{#if syncing}}disabled{{/if}}">
+          <i class="refresh icon"></i> Sync
+        </div>
+      </div>
+
       <a class="ui item">Logout</a>
     </div>
   </div>

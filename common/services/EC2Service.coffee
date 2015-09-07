@@ -3,7 +3,7 @@
   name: 'EC2'
 
   sync: ->
-    if Meteor.isClient then return console.warn "Cannot sync data from client"
+    if Meteor.isClient then return log.warn "Cannot sync data from client"
 
     reservations = new AWS.EC2({region: 'ap-southeast-2'}).describeInstancesSync().Reservations
     docs = for instance in _.flatten _.pluck(reservations, 'Instances')

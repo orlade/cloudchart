@@ -5,22 +5,22 @@
   # assumed that `docs` represents all the docs that should be in the database. Any docs in the
   # database that are not in `docs` will be removed from the database.
   sync: (collection, docs, complete=false) ->
-    log = (args...) -> console.log("[#{collection._name}]:", args...)
+    slog = (args...) -> log.debug("[#{collection._name}]:", args...)
 
-    if Meteor.isClient then return console.warn "Cannot sync data from client"
-    unless docs and docs.length then return log "No docs"
-    log "Syncing #{docs.length} docs..."
+    if Meteor.isClient then return log.warn "Cannot sync data from client"
+    unless docs and docs.length then return slog "No docs"
+    slog "Syncing #{docs.length} docs..."
 
     # Add new docs.
     delta = for doc in docs
       collection.upsert doc._id, $set: doc
     count = delta.reduce ((z, d) -> z + (d.numAffected ? 0)), 0
-    log if count > 0 then "Updated #{count} docs" else "No updates"
+    slog if count > 0 then "Updated #{count} docs" else "No updates"
 
     # Remove obsolete docs.
     if complete
       count = collection.remove _id: $nin: (_.pluck docs, '_id')
-      log if delta > 0 then "Removed #{count} docs" else "Nothing removed"
+      slog if delta > 0 then "Removed #{count} docs" else "Nothing removed"
 
   # Syncs all service data. If on the client, delegates to the server via a Meteor method.
   syncAll: -> if Meteor.isServer then AwsSync.sync() else Meteor.call 'sync'

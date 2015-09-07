@@ -5,7 +5,7 @@ ecs = new AWS.ECS({region: 'ap-southeast-2'}) if Meteor.isServer
   name: 'ECS'
 
   sync: ->
-    if Meteor.isClient then return console.warn "Cannot sync data from client"
+    if Meteor.isClient then return log.warn "Cannot sync data from client"
 
     # Task definitions.
     taskdefs = for id in ecs.listTaskDefinitionsSync().taskDefinitionArns

@@ -18,4 +18,4 @@ for name in _.keys DEFAULT_VALUES
     set: (value) ->
       doc = {}
       doc[name] = value
-      StateCollection.update(GLOBAL_STATE_ID, doc)
+      StateCollection.update(GLOBAL_STATE_ID, $set: doc)

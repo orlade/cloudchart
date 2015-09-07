@@ -8,8 +8,9 @@ Meteor.startup ->
   services: [S3Service, EC2Service, ECSService]
   sync: ->
     State.syncing = true
-    s.sync() for s in @services
-    State.syncing = false
+    log.info "Syncing AWS service details..."
+    try s.sync() for s in @services
+    finally State.syncing = false
 
 Meteor.methods
   sync: -> Syncer.syncAll()

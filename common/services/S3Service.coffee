@@ -3,7 +3,7 @@
   name: 'S3'
 
   sync: ->
-    if Meteor.isClient then return console.warn "Cannot sync data from client"
+    if Meteor.isClient then return log.warn "Cannot sync data from client"
 
     buckets = for bucket in new AWS.S3().listBucketsSync().Buckets
       _.extend bucket, _id: bucket.Name

@@ -10,5 +10,3 @@ Template.Dashboard.events
   'click a.service': (e) ->
     Router.go('service', {id: @id})
     false
-
-  'click .sync.button': (e) -> Meteor.call 'sync'

@@ -43,7 +43,7 @@ aws s3 cp s3://#{EcsConfiguration.configBucket}/#{EcsConfiguration.ecsConfigKey}
 # Installs the ECS configuration script on S3. Server only, since client-side returns above.
 EcsConfiguration.install = ->
   State.ecsConfigInstalling = true
-  console.log "Installing ECS configuration script to #{EcsConfiguration.ecsConfigKey}..."
+  log.info "Installing ECS configuration script to #{EcsConfiguration.ecsConfigKey}..."
   try
     s3 = new AWS.S3()
 
