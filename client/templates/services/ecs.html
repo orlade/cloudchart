@@ -25,7 +25,26 @@
     {{#each services}}
       <li>
         <span class="status {{status}}">{{status}}</span>:
-        <a class="cluster" href="#">{{name}}</a></li>
+        <a class="service" href="#">{{serviceName}}</a>
+        (<span class="running count">{{runningCount}}</span>
+        {{#if pendingCount}} + <span class="pending count">{{pendingCount}}</span>{{/if}}
+        / <span class="desired count">{{desiredCount}})</span>
+        <button class="ui mini scale down icon button"><i class="minus icon"></i></button>
+        <button class="ui mini scale up icon button"><i class="plus icon"></i></button>
+
+        {{#if hasTasks}}
+        <br/><strong>Tasks:</strong>
+        <ul>
+          {{#each tasks}}
+            <li>
+              <span class="status {{status}}">{{status}}</span>:
+              <span class="task id"><a href="{{taskUrl}}">{{_id}}</a></span>
+              {{#each errors}}{{.}}<br/>{{/each}}
+            </li>
+          {{/each}}
+        </ul>
+        {{/if}}
+      </li>
     {{else}}
       <span class="empty">No services.</span>
     {{/each}}

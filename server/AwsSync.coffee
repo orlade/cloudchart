@@ -6,10 +6,18 @@ Meteor.startup ->
 
 @AwsSync =
   services: [S3Service, EC2Service, ECSService]
-  sync: ->
+
+  # Syncs data for the `services` specified by ID. If `services` is not provided, syncs all
+  # services.
+  sync: (services) ->
     State.syncing = true
     log.info "Syncing AWS service details..."
-    try s.sync() for s in @services
+
+    # Determine which services to sync.
+    if services? then services = @services.filter (s) -> _.contains services, s.id
+    else services = @services
+
+    try s.sync() for s in services
     finally State.syncing = false
 
 Meteor.methods

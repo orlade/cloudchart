@@ -22,5 +22,10 @@
       count = collection.remove _id: $nin: (_.pluck docs, '_id')
       slog if delta > 0 then "Removed #{count} docs" else "Nothing removed"
 
+  # Syncs data for the specfied services.
+  syncService: (services) ->
+    unless Array.isArray services then services  = [services]
+    AwsSync.sync services
+
   # Syncs all service data. If on the client, delegates to the server via a Meteor method.
   syncAll: -> if Meteor.isServer then AwsSync.sync() else Meteor.call 'sync'

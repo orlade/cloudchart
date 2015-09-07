@@ -30,7 +30,7 @@ Object.defineProperty EcsConfiguration, 'authData', get: ->
 # Docker images.
 Object.defineProperty EcsConfiguration, 'script', get: ->
   """ECS_ENGINE_AUTH_TYPE=docker
-ECS_ENGINE_AUTH_DATA=\"#{JSON.stringify(EcsConfiguration.authData)}\""""
+ECS_ENGINE_AUTH_DATA=#{JSON.stringify(EcsConfiguration.authData)}"""
 
 # This is an EC2 instance User Data script that is executed each time a new ECS container instance
 # is created. It installs the AWS CLI tool and downloads the ECS configuration script, which in turn
