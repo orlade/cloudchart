@@ -3,7 +3,17 @@
 
   <ul>
     {{#each instances}}
-      <li>{{status}}: <a class="instance" href="http://{{ip}}">{{_id}}</a>{{#if spot}} (spot){{/if}}</li>
+      <li>
+        <div class="ui status {{statusColor}} horizontal label">{{status}}</div>
+        <span class="name">{{name}}</span>,
+        <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
+        <a class="instance" href="http://{{ip}}">{{ip}}</a>
+        <ul>
+          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{spotPrice}}){{/if}}</li>
+          <li>Launched: {{LaunchTime}}</li>
+          <li>Auto-scale group: {{autoscaleGroup}}</li>
+        </ul>
+      </li>
     {{/each}}
   </ul>
 </template>

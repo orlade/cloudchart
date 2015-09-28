@@ -21,4 +21,5 @@ semantic:ui-icon
 # matb33:collection-hooks
 peerlibrary:aws-sdk
 reactive-var
+reactive-dict
 wylio:winston-papertrail
