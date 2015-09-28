@@ -9,7 +9,7 @@
         <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
         <a class="instance" href="http://{{ip}}">{{ip}}</a>
         <ul>
-          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{spotPrice}}){{/if}}</li>
+          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}){{/if}}</li>
           <li>Launched: {{LaunchTime}}</li>
           <li>Auto-scale group: {{autoscaleGroup}}</li>
         </ul>

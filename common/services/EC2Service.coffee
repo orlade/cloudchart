@@ -17,27 +17,37 @@ REGION_REGEX = /\w+\-\w+\-\d+/
         region: instance.Placement.AvailabilityZone.match(REGION_REGEX)[0]
     Syncer.sync EC2Instances, docs, true
 
+    EC2Service.syncSpotPrices()
+
   # Looks up the latest spot price relevant for the current instances.
-  getSpotPrices: ->
-    if Meteor.isClient then return log.warn "Cannot request spot prices from the client"
-    params =
-#      AvailabilityZone: instance.Placement.AvailabilityZone
-      InstanceTypes: []
-#      MaxResults: 1
-      ProductDescriptions: ['Linux/UNIX']
-      Filters: [{Name: 'timestamp', Values: [new Date().toISOString()]}]
+  syncSpotPrices: ->
+    if Meteor.isClient then return log.warn "Cannot sync data from client"
 
     instances = EC2Instances.find().fetch()
-    params.Instancetypes = _.uniq(instance.InstanceType for instance in instances)
+    azTypes = {}
+    for instance in instances when instance.spot
+      types = azTypes[instance.Placement.AvailabilityZone]
+      unless types? then types = azTypes[instance.Placement.AvailabilityZone] = {}
+      typeInstances = types[instance.InstanceType]
+      unless typeInstances? then typeInstances = types[instance.InstanceType] = []
+      typeInstances.push instance
 
-    data = new AWS.EC2({region: instance.region}).describeSpotPriceHistorySync(params).SpotPriceHistory
+    for az, types of azTypes
+      params =
+        InstanceTypes: _.keys types
+        MaxResults: _.size types
+        ProductDescriptions: ['Linux/UNIX']
 
-    output = {}
-    for instance in instances
-      output[instance._id] = data.filter((price) -> instance.InstanceType == price.InstanceType and
-        instance.Placement.AvailabilityZone == price.AvailabilityZone)[0].SpotPrice
-    console.log output
-    output
+      handleResult = Meteor.bindEnvironment (err, res) ->
+        if err then console.log "ERROR: Failed to get spot prices for", params, err
+        else for price in res.SpotPriceHistory
+          for instance in azTypes[price.AvailabilityZone][price.InstanceType]
+            EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
+
+      new AWS.EC2({region: EC2Service.azToRegion(az)}).describeSpotPriceHistory params, handleResult
+    azTypes
+
+  azToRegion: (az) -> az.match(REGION_REGEX)[0]
 
 
 Object.defineProperties EC2Service,
@@ -54,4 +64,4 @@ Object.defineProperties EC2Service,
   asgs: get: ->
 
 Meteor.methods
-  getSpotPrices: -> if Meteor.isServer then EC2Service.getSpotPrices()
+  syncSpotPrices: -> if Meteor.isServer then EC2Service.syncSpotPrices()
