@@ -37,10 +37,15 @@ REGION_REGEX = /\w+\-\w+\-\d+/
         InstanceTypes: _.keys types
         MaxResults: _.size types
         ProductDescriptions: ['Linux/UNIX']
+        Filters: [{
+          Name: 'availability-zone'
+          Values: [az]
+        }]
 
       handleResult = Meteor.bindEnvironment (err, res) ->
         if err then console.log "ERROR: Failed to get spot prices for", params, err
         else for price in res.SpotPriceHistory
+          console.log azTypes, price.AvailabilityZone
           for instance in azTypes[price.AvailabilityZone][price.InstanceType]
             EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
 

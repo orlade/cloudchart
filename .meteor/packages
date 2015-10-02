@@ -6,8 +6,6 @@
 
 meteor-platform
 standard-app-packages
-autopublish
-insecure
 coffeescript
 less
 
@@ -19,6 +17,7 @@ semantic:ui-icon
 # aldeed:simple-schema@1.3.0
 # aramk:utility@0.9.0
 # matb33:collection-hooks
+
 peerlibrary:aws-sdk
 reactive-var
 reactive-dict
