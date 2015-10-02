@@ -2,7 +2,7 @@
   <div class="ui top secondary pointing menu">
     <a href="/">
       <div class="title">
-        <img class="logo" src="/images/logo-small.png"/>
+        <img class="logo" src="/images/logo-small.png" />
         <span class="name">Cortex</span>
       </div>
     </a>
@@ -17,7 +17,11 @@
         </div>
       </div>
 
-      <a class="ui item">Logout</a>
+      {{#if currentUser}}
+        <a class="ui logout item">Logout</a>
+      {{else}}
+        <a class="ui login item">Login</a>
+      {{/if}}
     </div>
   </div>
 </template>

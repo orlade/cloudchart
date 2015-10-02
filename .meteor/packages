@@ -9,6 +9,9 @@ standard-app-packages
 coffeescript
 less
 
+reactive-var
+reactive-dict
+
 iron:router
 semantic:ui-css
 semantic:ui-icon
@@ -19,6 +22,8 @@ semantic:ui-icon
 # matb33:collection-hooks
 
 peerlibrary:aws-sdk
-reactive-var
-reactive-dict
 wylio:winston-papertrail
+
+aldeed:autoform
+urbanetic:accounts-local
+urbanetic:accounts-ui

@@ -4,6 +4,10 @@ Router.configure
     navbar: to: 'header'
     footer: to: 'footer'
   data: -> _.extend State, @params
+  onBeforeAction: ->
+    return unless @ready()
+    AccountsUi.signInRequired(@)
+  action: -> if @ready() then @render()
 
 Router.route '/', {name: 'Dashboard'}
 

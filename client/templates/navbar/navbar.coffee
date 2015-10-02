@@ -6,4 +6,7 @@ Template.navbar.events
     Router.go e.currentTarget.href
     false
 
-  'click .sync.button': (e) -> Meteor.call 'sync'
+  'click .sync.button': -> Meteor.call 'sync'
+
+  'click .login': -> AccountsUi.goToLogin()
+  'click .logout': -> if confirm 'Are you sure you want to logout?' then Meteor.logout()

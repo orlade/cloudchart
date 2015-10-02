@@ -1,0 +1,6 @@
+[submodule "packages/meteor-accounts-ui"]
+	path = packages/meteor-accounts-ui
+	url = git@github.com:urbanetic/meteor-accounts-ui.git
+[submodule "packages/meteor-accounts-local"]
+	path = packages/meteor-accounts-local
+	url = git@github.com:urbanetic/meteor-accounts-local.git
