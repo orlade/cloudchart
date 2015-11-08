@@ -13,7 +13,7 @@ iron:router
 semantic:ui-css
 semantic:ui-icon
 
-# aldeed:autoform
+aldeed:autoform
 matb33:collection-hooks
 
 peerlibrary:aws-sdk
