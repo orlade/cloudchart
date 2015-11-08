@@ -5,6 +5,7 @@
   # assumed that `docs` represents all the docs that should be in the database. Any docs in the
   # database that are not in `docs` will be removed from the database.
   sync: (collection, docs, complete=false) ->
+    # Helper function for logging with collection name prefix.
     slog = (args...) -> log.debug("[#{collection._name}]:", args...)
 
     if Meteor.isClient then return log.warn "Cannot sync data from client"

@@ -5,25 +5,19 @@
 # but you can also edit it by hand.
 
 meteor-platform
-standard-app-packages
+
 coffeescript
 less
-
-reactive-var
-reactive-dict
 
 iron:router
 semantic:ui-css
 semantic:ui-icon
 
-# aldeed:collection2@2.3.2
-# aldeed:simple-schema@1.3.0
-# aramk:utility@0.9.0
-# matb33:collection-hooks
+# aldeed:autoform
+matb33:collection-hooks
 
 peerlibrary:aws-sdk
-wylio:winston-papertrail
+# wylio:winston-papertrail
 
-aldeed:autoform
 urbanetic:accounts-local
 urbanetic:accounts-ui
