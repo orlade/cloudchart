@@ -4,6 +4,7 @@
 
   sync: ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
+    log.debug "Syncing S3 buckets..."
 
     buckets = for bucket in new AWS.S3().listBucketsSync().Buckets
       _.extend bucket, _id: bucket.Name

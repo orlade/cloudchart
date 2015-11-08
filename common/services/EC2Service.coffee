@@ -6,6 +6,7 @@ REGION_REGEX = /\w+\-\w+\-\d+/
 
   sync: ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
+    log.debug "Syncing EC2 instances..."
 
     reservations = new AWS.EC2({region: 'ap-southeast-2'}).describeInstancesSync().Reservations
     docs = for instance in _.flatten _.pluck(reservations, 'Instances')
@@ -22,6 +23,7 @@ REGION_REGEX = /\w+\-\w+\-\d+/
   # Looks up the latest spot price relevant for the current instances.
   syncSpotPrices: ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
+    log.debug "Syncing EC2 spot prices..."
 
     instances = EC2Instances.find().fetch()
     azTypes = {}

@@ -4,7 +4,7 @@
   # Syncs `docs` into `collection` and reports on the changes. If `complete` is `true`, then it is
   # assumed that `docs` represents all the docs that should be in the database. Any docs in the
   # database that are not in `docs` will be removed from the database.
-  sync: (collection, docs, complete=false) ->
+  sync: Meteor.bindEnvironment (collection, docs, complete=false) ->
     # Helper function for logging with collection name prefix.
     slog = (args...) -> log.debug("[#{collection._name}]:", args...)
 

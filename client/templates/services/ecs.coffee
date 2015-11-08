@@ -4,8 +4,9 @@ Template.ecs.helpers
   installing: -> State.ecsConfigInstalling
   hasTasks: -> @tasks?.length
 
-  taskdefs: -> ECSService.taskdefs
-  services: -> ECSService.services
+  taskdefFamilies: -> ECSService.taskdefs
+  latestRevision: -> _.last _.values(@revisions)
+
   clusters: -> ECSService.clusters
 
   taskUrl: -> "#{ECS_ROOT_URL}#/clusters/default/tasks/#{@_id.split('/')[1]}"

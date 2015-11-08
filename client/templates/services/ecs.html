@@ -9,55 +9,121 @@
   </div>
 
   <h2>Task Definitions</h2>
-  <ul>
-    {{#each taskdefs}}
-      <li>
-        <span class="status {{status}}">{{status}}</span>:
-        <a class="taskdef" href="#">{{family}}:{{revision}}</a>
-      </li>
-    {{else}}
-      <span class="empty">No task definitions.</span>
-    {{/each}}
-  </ul>
-
-  <h2>Services</h2>
-  <ul>
-    {{#each services}}
-      <li>
-        <span class="status {{status}}">{{status}}</span>:
-        <a class="service" href="#">{{serviceName}}</a>
-        (<span class="running count">{{runningCount}}</span>
-        {{#if pendingCount}} + <span class="pending count">{{pendingCount}}</span>{{/if}}
-        / <span class="desired count">{{desiredCount}})</span>
-        <button class="ui mini scale down icon button"><i class="minus icon"></i></button>
-        <button class="ui mini scale up icon button"><i class="plus icon"></i></button>
-
-        {{#if hasTasks}}
-        <br/><strong>Tasks:</strong>
-        <ul>
-          {{#each tasks}}
-            <li>
-              <span class="status {{status}}">{{status}}</span>:
-              <span class="task id"><a href="{{taskUrl}}">{{_id}}</a></span>
-              {{#each errors}}{{.}}<br/>{{/each}}
-            </li>
-          {{/each}}
-        </ul>
+  <table class="ui table celled">
+    <thead>
+    <tr>
+      <th>Status</th>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each taskdefFamilies}}
+      <tr>
+        <td class="collapsing"><span class="ui horizontal {{color}} label">{{status}}</span></td>
+        {{#if latestRevision}}
+          {{#with latestRevision}}
+            <td><a class="taskdef" href="#">{{family}}:{{revision}}</a></td>
+          {{/with}}
+        {{else}}
+          <td class="empty">No active revision</td>
         {{/if}}
-      </li>
+      </tr>
     {{else}}
-      <span class="empty">No services.</span>
+      <tr class="empty">
+        <td colspan="2">No task definitions</td>
+      </tr>
     {{/each}}
-  </ul>
+    </tbody>
+  </table>
 
   <h2>Clusters</h2>
-  <ul>
-    {{#each clusters}}
-      <li>
-        <span class="status {{status}}">{{status}}</span>:
-        <a class="cluster" href="#">{{name}}</a></li>
-    {{else}}
-      <span class="empty">No clusters.</span>
-    {{/each}}
-  </ul>
+
+  <div class="clusters">
+    <div class="ui two stackable cluster cards">
+      {{#each clusters}}
+        {{> EcsCluster}}
+      {{else}}
+        <span class="empty">No clusters.</span>
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="EcsCluster">
+  <div class="ui {{color}} cluster card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span>{{name}}</span>
+          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+        </div>
+      </div>
+      <div class="meta">
+        {{activeServicesCount}} services,
+        {{registeredContainerInstancesCount}} instances,
+        {{runningTasksCount}} tasks
+      </div>
+      <div class="description">
+        <span class="child-type">{{#if services}}Services:{{else}}No services{{/if}}</span>
+      </div>
+
+      <!-- Child service cards -->
+      <div class="extra content">
+        <div class="ui cards">
+          {{#each services}}
+            {{> EcsService}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="EcsService">
+  <div class="{{color}} card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span>{{name}}</span>
+          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+        </div>
+      </div>
+      <div class="meta">{{taskdefName}}</div>
+      <div class="description">
+        <span class="child-type">Tasks</span>:
+        <span class="running count">{{runningCount}}</span>
+        {{#if pendingCount}} + <span
+            class="pending count">{{pendingCount}}</span>{{/if}}
+        / <span class="desired count">{{desiredCount}}</span>
+
+        <button class="ui mini scale down icon button"><i class="minus icon"></i>
+        </button>
+        <button class="ui mini scale up icon button"><i class="plus icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Child task cards -->
+    <div class="extra content">
+      <div class="ui cards">
+        {{#each tasks}}
+          {{> EcsTask}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="EcsTask">
+  <div class="{{color}} card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span>{{name}}</span>
+          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+        </div>
+      </div>
+      <div class="id meta">{{taskId}}</div>
+    </div>
+  </div>
 </template>

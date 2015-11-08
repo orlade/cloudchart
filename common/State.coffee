@@ -35,6 +35,7 @@ _.each DEFAULT_VALUES, (value, key) ->
     # Collection lookup is reactive. Elvis operator defends against collection not being ready yet.
     get: -> StateCollection.findOne(GLOBAL_STATE_ID)?[key]
     set: (value) ->
+      log.debug "Setting #{key} to #{value}..."
       modifier = {}
       modifier[key] = value
       StateCollection.update(GLOBAL_STATE_ID, $set: modifier)
