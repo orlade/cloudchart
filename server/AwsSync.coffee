@@ -16,7 +16,7 @@ Meteor.startup ->
 # Facade for synchronization of AWS services.
 @AwsSync =
   # The services to sync by default.
-  services: [S3Service, EC2Service, ECSService]
+  services: [S3Service, EC2Service, ECSSyncService]
 
   # Syncs data for the `services` specified by ID. If `services` is not provided, syncs all
   # supported services.

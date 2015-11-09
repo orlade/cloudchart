@@ -1,24 +1,21 @@
-REGION_REGEX = /\w+\-\w+\-\d+/
+ec2 = new AWS.EC2({region: 'ap-southeast-2'})
 
 @EC2Service =
   id: 'ec2'
   name: 'EC2'
 
   sync: ->
+    EC2Service.syncInstances()
+#    EC2Service.syncSpotPrices()
+
+  syncInstances: ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
     log.debug "Syncing EC2 instances..."
 
-    reservations = new AWS.EC2({region: 'ap-southeast-2'}).describeInstancesSync().Reservations
-    docs = for instance in _.flatten _.pluck(reservations, 'Instances')
-      _.extend instance,
-        _id: instance.InstanceId
-        ip: instance.PublicIpAddress
-        status: instance.State.Name
-        spot: instance.SpotInstanceRequestId
-        region: instance.Placement.AvailabilityZone.match(REGION_REGEX)[0]
-    Syncer.sync EC2Instances, docs, true
-
-    EC2Service.syncSpotPrices()
+    ec2.describeInstances Meteor.bindEnvironment (err, {Reservations}) ->
+      docs = (new EC2Instance(inst) for inst in _.flatten _.pluck(Reservations, 'Instances'))
+      Syncer.sync EC2Instances, docs, true
+      log.debug "Finished syncing EC2 instances"
 
   # Looks up the latest spot price relevant for the current instances.
   syncSpotPrices: ->
@@ -34,7 +31,7 @@ REGION_REGEX = /\w+\-\w+\-\d+/
       unless typeInstances? then typeInstances = types[instance.InstanceType] = []
       typeInstances.push instance
 
-    for az, types of azTypes
+    _.each azTypes, Meteor.bindEnvironment (types, az) ->
       params =
         InstanceTypes: _.keys types
         MaxResults: _.size types
@@ -47,14 +44,12 @@ REGION_REGEX = /\w+\-\w+\-\d+/
       handleResult = Meteor.bindEnvironment (err, res) ->
         if err then console.log "ERROR: Failed to get spot prices for", params, err
         else for price in res.SpotPriceHistory
-          console.log azTypes, price.AvailabilityZone
           for instance in azTypes[price.AvailabilityZone][price.InstanceType]
             EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
 
-      new AWS.EC2({region: EC2Service.azToRegion(az)}).describeSpotPriceHistory params, handleResult
+      new AWS.EC2({region: Region.azToRegion(az)}).describeSpotPriceHistory params, handleResult
     azTypes
 
-  azToRegion: (az) -> az.match(REGION_REGEX)[0]
 
 
 Object.defineProperties EC2Service,

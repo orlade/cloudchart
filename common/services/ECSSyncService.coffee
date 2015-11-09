@@ -31,34 +31,35 @@ mapMerge = (destination, source, mapping) ->
       else if typeof destKey == 'function' then destKey(destination, source[sourceKey])
   destination
 
-@ECSService =
+@ECSSyncService =
   id: 'ecs'
   name: 'ECS'
 
   checkClient: -> if Meteor.isClient then throw new Error "Cannot sync data from client"
 
   sync: ->
-    ECSService.syncClusters()
-    ECSService.syncTaskDefs()
+    ECSSyncService.syncClusters()
+    ECSSyncService.syncTaskDefs()
 
   syncTaskDefs: ->
     @checkClient()
     log.debug "Syncing task definitions..."
     ecs.listTaskDefinitionFamilies Meteor.bindEnvironment (err, data) ->
       if err? then return log.error "Failed to list task definition families:", err
-      for familyName in data.families
+      families = for familyName in data.families
         family = {_id: familyName, revisions: {}}
 
         try
           {taskDefinition} = ecs.describeTaskDefinitionSync {taskDefinition: familyName}
-          mapMerge(taskDefinition, taskDefinition, MAPPINGS.TASK_DEFINITION)
+          taskDefinition = new ECSTaskDefinition(taskDefinition)
           family.revisions[taskDefinition.revision] = taskDefinition
           family.status = taskDefinition.status
         catch err
           family.status = 'INACTIVE'
-          log.error "Failed to describe task definition of #{familyName}:", err
-
-        Syncer.sync ECSTaskDefinitionFamilies, [family]
+          log.warn "Failed to describe task definition of #{familyName}:", err
+        family
+      Syncer.sync ECSTaskDefinitionFamilies, families
+      log.debug "Finished syncing ECS task definitions"
 
   syncClusters: ->
     @checkClient()
@@ -67,7 +68,7 @@ mapMerge = (destination, source, mapping) ->
       if err? then return log.error "Failed to describe clusters:", err
 
       {clusters} = ecs.describeClustersSync {clusters: clusterArns}
-      mapMerge(cluster, cluster, MAPPINGS.CLUSTER) for cluster in clusters
+      clusters = (new ECSCluster(cluster) for cluster in clusters)
 
       # Sync the services of each cluster.
       for cluster in clusters
@@ -75,7 +76,7 @@ mapMerge = (destination, source, mapping) ->
         unless serviceArns?.length then continue
 
         {services} = ecs.describeServicesSync {services: serviceArns, cluster: cluster._id}
-        mapMerge(service, service, MAPPINGS.SERVICE) for service in services
+        services = (new ECSService(service) for service in services)
 
         # Sync the tasks of each service.
         for service in services
@@ -83,14 +84,15 @@ mapMerge = (destination, source, mapping) ->
           unless taskArns?.length then continue
 
           {tasks} = ecs.describeTasksSync {tasks: taskArns, cluster: cluster._id}
-          mapMerge(task, task, MAPPINGS.TASK) for task in tasks
+          tasks = (new ECSTask(task) for task in tasks)
 
           service.tasks = tasks
         cluster.services = services
       Syncer.sync ECSClusters, clusters, true
+      log.debug "Finished syncing ECS clusters"
 
 
-  # Scales the `service` to run `count` instances on `cluster`.
+# Scales the `service` to run `count` instances on `cluster`.
   scale: (service, count, cluster = 'default') ->
     log.info "Scaling #{service} to #{count} instances on #{cluster}..."
     if Meteor.isClient then return Meteor.call 'ecs/scale', service, count, cluster
@@ -98,11 +100,11 @@ mapMerge = (destination, source, mapping) ->
     ecs.updateServiceSync {service: service, cluster: cluster, desiredCount: count}
 #    Syncer.sync 'ecs'
 
-Object.defineProperty ECSService, 'taskdefs', get: -> ECSTaskDefinitionFamilies.find()
-Object.defineProperty ECSService, 'clusters', get: -> ECSClusters.find()
+Object.defineProperty ECSSyncService, 'taskdefs', get: -> ECSTaskDefinitionFamilies.find()
+Object.defineProperty ECSSyncService, 'clusters', get: -> ECSClusters.find()
 
-Object.defineProperty ECSService, 'count', get: -> ECSClusters.find().count()
+Object.defineProperty ECSSyncService, 'count', get: -> ECSClusters.find().count()
 
 if Meteor.isServer
   Meteor.methods
-    'ecs/scale': (args...) -> ECSService.scale args...
+    'ecs/scale': (args...) -> ECSSyncService.scale args...

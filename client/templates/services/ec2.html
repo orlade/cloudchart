@@ -9,11 +9,36 @@
         <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
         <a class="instance" href="http://{{ip}}">{{ip}}</a>
         <ul>
-          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}){{/if}}</li>
+          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}
+            ){{/if}}</li>
           <li>Launched: {{LaunchTime}}</li>
           <li>Auto-scale group: {{autoscaleGroup}}</li>
         </ul>
       </li>
     {{/each}}
   </ul>
+</template>
+
+<template name="Ec2Instance">
+  <div class="{{color}} card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span class="name">
+            {{#if name}}{{name}} ({{InstanceType}}){{else}}{{InstanceType}}{{/if}}
+          </span>
+          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+        </div>
+      </div>
+      <div class="meta">
+        <div>
+          <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
+          <a class="instance" href="http://{{ip}}">{{ip}}</a>
+        </div>
+        <div>
+          {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}){{/if}}, launched {{LaunchTime}}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

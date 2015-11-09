@@ -13,15 +13,18 @@
     slog "Syncing #{docs.length} docs..."
 
     # Add new docs.
-    delta = for doc in docs
-      collection.upsert doc._id, $set: doc
-    count = delta.reduce ((z, d) -> z + (d.numAffected ? 0)), 0
+    deltas = for doc in docs
+      [mapping, doc._mapping] = [doc._mapping, undefined]
+      delta = collection.upsert doc._id, $set: doc
+      doc._mapping = mapping
+      delta
+    count = deltas.reduce ((z, d) -> z + (d.numAffected ? 0)), 0
     slog if count > 0 then "Updated #{count} docs" else "No updates"
 
     # Remove obsolete docs.
     if complete
       count = collection.remove _id: $nin: (_.pluck docs, '_id')
-      slog if delta > 0 then "Removed #{count} docs" else "Nothing removed"
+      slog if deltas > 0 then "Removed #{count} docs" else "Nothing removed"
 
   # Syncs data for the specfied services.
   syncService: (services) ->

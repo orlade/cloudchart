@@ -1,4 +1,4 @@
 @Services =
   ec2: EC2Service
-  ecs: ECSService
+  ecs: ECSSyncService
   s3: S3Service
