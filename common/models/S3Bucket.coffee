@@ -1,3 +1,3 @@
 class @S3Bucket extends Model
   _mapping:
-    Name: '_id'
+    Name: (bucket, name) -> bucket._id = bucket.Name = name
