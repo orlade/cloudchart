@@ -1,9 +1,24 @@
 <template name="Dashboard">
   <h1>Dashboard</h1>
 
-  <ul>
+  <div class="ui six stackable cards">
     {{#each services}}
-      <li><a class="{{id}} service" href="#">{{name}}</a>{{#if count}} ({{count}}){{/if}}</li>
+      {{> ServiceTemplate}}
     {{/each}}
-  </ul>
+  </div>
+</template>
+
+<template name="ServiceTemplate">
+  <div class="{{id}} service card">
+    <div class="content">
+      <div class="header">
+        <div class="large aws {{id}} icon"></div>
+        <a class="{{id}} name" href="#">{{name}}</a>
+        {{#if count}}<span class="count">({{count}})</span>{{/if}}
+      </div>
+      <div class="meta">
+        <div>{{region}}</div>
+      </div>
+    </div>
+  </div>
 </template>

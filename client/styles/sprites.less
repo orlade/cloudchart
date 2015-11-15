@@ -1,0 +1,17 @@
+.offset(@index) {
+  background-position: @index * -32px -59px;
+}
+
+.aws.icon {
+  display: inline-block;
+
+  background-image: url("/images/aws-spritemap.png");
+  &.large {
+    width: 32px;
+    height: 32px;
+  }
+  &.ec2 {.offset(0);}
+  &.ecs {.offset(39);}
+  &.s3 {.offset(3);}
+
+}
