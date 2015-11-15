@@ -1,7 +1,7 @@
 <template name="s3">
   <h1>AWS S3</h1>
 
-  <div class="ui six stackable cards">
+  <div class="ui four stackable cards">
     {{#each buckets}}
       {{> S3BucketTemplate}}
     {{/each}}
@@ -10,15 +10,22 @@
 
 <template name="S3BucketTemplate">
   <div class="card">
+    <a href="{{manageUrl}}" target="_blank">
     <div class="content">
       <div class="header">
         <div>
           <span class="name">{{Name}}</span>
+          {{#if website}}
+          <a class="ui top right attached mini blue label" href="{{website.url}}">
+            <i class="ui external icon"></i> WEBSITE
+          </a>
+          {{/if}}
         </div>
       </div>
       <div class="meta">
         <div>{{region}}</div>
       </div>
     </div>
+    </a>
   </div>
 </template>

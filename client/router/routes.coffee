@@ -5,7 +5,6 @@ Router.configure
     footer: to: 'footer'
   data: -> _.extend State, @params
   onBeforeAction: ->
-    return unless @ready()
     AccountsUi.signInRequired(@)
   action: -> if @ready() then @render()
 

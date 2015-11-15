@@ -7,6 +7,6 @@ Template.Dashboard.helpers
   count: -> if @count? then "#{@count}"
 
 Template.Dashboard.events
-  'click a.service': (e) ->
+  'click .service.card': (e) ->
     Router.go('service', {id: @id})
     false
