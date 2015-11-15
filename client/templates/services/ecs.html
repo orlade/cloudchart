@@ -9,7 +9,24 @@
   </div>
 
   <h2>Task Definitions</h2>
-  <table class="ui table celled">
+
+  {{> TaskDefinitionsTemplate}}
+
+  <h2>Clusters</h2>
+
+  <div class="clusters">
+    <div class="ui one stackable cluster cards">
+      {{#each clusters}}
+        {{> ECSClusterTemplate}}
+      {{else}}
+        <span class="empty">No clusters.</span>
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="TaskDefinitionsTemplate">
+  <table class="ui task-definitions table celled">
     <thead>
     <tr>
       <th>Status</th>
@@ -19,10 +36,17 @@
     <tbody>
     {{#each taskdefFamilies}}
       <tr>
-        <td class="collapsing"><span class="ui horizontal {{color}} label">{{status}}</span></td>
+        <td class="collapsing" title="Status: {{status}}">
+          <span class="ui horizontal {{color}} label">{{upperCase status}}</span>
+        </td>
         {{#if latestRevision}}
           {{#with latestRevision}}
-            <td><a class="taskdef" href="#">{{family}}:{{revision}}</a></td>
+            <td>
+              <a class="taskdef" href="{{manageUrl}}" target="_blank"
+                  title="Manage latest revision of {{family}}">
+                {{family}}:{{revision}}
+              </a>
+            </td>
           {{/with}}
         {{else}}
           <td><a href="#">{{_id}}</a>: <span class="empty">No active revision</span></td>
@@ -35,27 +59,17 @@
     {{/each}}
     </tbody>
   </table>
-
-  <h2>Clusters</h2>
-
-  <div class="clusters">
-    <div class="ui one stackable cluster cards">
-      {{#each clusters}}
-        {{> EcsCluster}}
-      {{else}}
-        <span class="empty">No clusters.</span>
-      {{/each}}
-    </div>
-  </div>
 </template>
 
-<template name="EcsCluster">
+<template name="ECSClusterTemplate">
   <div class="ui {{color}} cluster card">
     <div class="content">
       <div class="header">
         <div>
-          <span>{{name}}</span>
-          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+          <a class="name"  href="{{manageUrl}}" target="_blank" title="Manage cluster">{{name}}</a>
+          <a class="ui top right attached mini {{color}} label" title="Status: {{status}}">
+            {{upperCase status}}
+          </a>
         </div>
       </div>
       <div class="meta">
@@ -71,7 +85,7 @@
       <div class="extra content">
         <div class="ui cards">
           {{#each services}}
-            {{> EcsService}}
+            {{> ECSServiceTemplate}}
           {{/each}}
         </div>
       </div>
@@ -79,26 +93,38 @@
   </div>
 </template>
 
-<template name="EcsService">
+<template name="ECSServiceTemplate">
   <div class="{{color}} card">
     <div class="content">
       <div class="header">
         <div>
-          <span>{{name}}</span>
-          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+          <a class="name" href="{{manageUrl}}" target="_blank" title="Manage service">{{name}}</a>
+          <a class="ui top right attached mini {{color}} label" title="Status: {{status}}">
+            {{upperCase status}}
+          </a>
         </div>
       </div>
-      <div class="meta">{{taskdefName}}</div>
+      <div class="meta">
+        <span title="Parent task definition">{{taskdefName}}</span>
+        {{#if loadBalancers}}
+        <span class="elb" title="Service load balancers">
+          <i class="ui sitemap icon"></i> {{loadBalancerNames}}
+        </span>
+        {{/if}}
+      </div>
       <div class="description">
         <span class="child-type">Tasks</span>:
-        <span class="running count">{{runningCount}}</span>
-        {{#if pendingCount}} + <span
-            class="pending count">{{pendingCount}}</span>{{/if}}
-        / <span class="desired count">{{desiredCount}}</span>
+        <span class="running count" title="Number of running tasks">{{runningCount}}</span>
+        {{#if pendingCount}}
+        + <span class="pending count" title="Number of pending tasks">{{pendingCount}}</span>
+        {{/if}}
+        / <span class="desired count" title="Number of desired tasks">{{desiredCount}}</span>
 
-        <button class="ui mini scale down icon button"><i class="minus icon"></i>
+        <button class="ui mini scale down icon button" title="Scale out">
+          <i class="minus icon"></i>
         </button>
-        <button class="ui mini scale up icon button"><i class="plus icon"></i>
+        <button class="ui mini scale up icon button" title="Scale in">
+          <i class="plus icon"></i>
         </button>
       </div>
     </div>
@@ -107,23 +133,27 @@
     <div class="extra content">
       <div class="ui cards">
         {{#each tasks}}
-          {{> EcsTask}}
+          {{> ECSTaskTemplate}}
         {{/each}}
       </div>
     </div>
   </div>
 </template>
 
-<template name="EcsTask">
+<template name="ECSTaskTemplate">
   <div class="{{color}} card">
     <div class="content">
       <div class="header">
         <div>
-          <span>{{name}}</span>
-          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+          <a class="name" href="{{manageUrl}}" target="_blank" title="Manage task">{{name}}</a>
+          <span class="ui top right attached mini {{color}} label" title="Status: {{status}}">
+            {{upperCase status}}
+          </span>
         </div>
       </div>
-      <div class="id meta">{{taskId}}</div>
+      <div class="meta">
+        <span class="mini id" title="Task ID">{{taskId}}</span>
+      </div>
     </div>
   </div>
 </template>

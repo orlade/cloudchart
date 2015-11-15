@@ -1,16 +1,30 @@
 // Common styling for service contents.
-.status.label {
-  text-transform: uppercase;
+.ui.cards .card {
+  .status.label {
+    text-transform: uppercase;
+  }
+
+  .name, .child-type {
+    font-weight: bold;
+  }
+
+  .empty {
+    font-style: italic;
+  }
+
+  .meta * {
+    margin: 0;
+  }
+
+  .mini.id {
+    font-size: 0.8em;
+  }
+
+  .right {
+    float: right;
+  }
 }
 
-.name, .child-type {
-  font-weight: bold;
-}
-
-.empty {
-  font-style: italic;
-}
-
-.ui.card .meta.id {
-  font-size: 0.8em;
+table.task-definitions td > * {
+  width: 100%;
 }

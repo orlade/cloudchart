@@ -15,6 +15,7 @@ semantic:ui-icon
 
 aldeed:autoform
 matb33:collection-hooks
+momentjs:moment
 aramk:utility
 
 peerlibrary:aws-sdk
