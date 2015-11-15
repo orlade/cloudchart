@@ -1,9 +1,24 @@
 <template name="s3">
   <h1>AWS S3</h1>
 
-  <ul>
+  <div class="ui six stackable cards">
     {{#each buckets}}
-      <li><a class="{{Name}}">{{Name}}</a></li>
+      {{> S3BucketTemplate}}
     {{/each}}
-  </ul>
+  </div>
+</template>
+
+<template name="S3BucketTemplate">
+  <div class="card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span class="name">{{Name}}</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div>{{region}}</div>
+      </div>
+    </div>
+  </div>
 </template>
