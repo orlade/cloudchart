@@ -25,7 +25,7 @@
             <td><a class="taskdef" href="#">{{family}}:{{revision}}</a></td>
           {{/with}}
         {{else}}
-          <td class="empty">No active revision</td>
+          <td><a href="#">{{_id}}</a>: <span class="empty">No active revision</span></td>
         {{/if}}
       </tr>
     {{else}}
@@ -39,7 +39,7 @@
   <h2>Clusters</h2>
 
   <div class="clusters">
-    <div class="ui two stackable cluster cards">
+    <div class="ui one stackable cluster cards">
       {{#each clusters}}
         {{> EcsCluster}}
       {{else}}
