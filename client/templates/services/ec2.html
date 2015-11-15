@@ -1,22 +1,28 @@
 <template name="ec2">
   <h1>AWS EC2</h1>
 
-  <ul>
+  <div class="ui six stackable cards">
     {{#each instances}}
-      <li>
-        <div class="ui status {{statusColor}} horizontal label">{{status}}</div>
-        <span class="name">{{name}}</span>,
-        <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
-        <a class="instance" href="http://{{ip}}">{{ip}}</a>
-        <ul>
-          <li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}
-            ){{/if}}</li>
-          <li>Launched: {{LaunchTime}}</li>
-          <li>Auto-scale group: {{autoscaleGroup}}</li>
-        </ul>
-      </li>
+      {{> Ec2Instance }}
     {{/each}}
-  </ul>
+  </div>
+
+  <!--<ul>-->
+    <!--{{#each instances}}-->
+  <!--<li>-->
+  <!--<div class="ui status {{statusColor}} horizontal label">{{status}}</div>-->
+  <!--<span class="name">{{name}}</span>,-->
+  <!--<span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @-->
+  <!--<a class="instance" href="http://{{ip}}">{{ip}}</a>-->
+  <!--<ul>-->
+    <!--<li>{{InstanceType}}, {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}-->
+      <!--){{/if}}</li>-->
+  <!--<li>Launched: {{LaunchTime}}</li>-->
+  <!--<li>Auto-scale group: {{autoscaleGroup}}</li>-->
+  <!--</ul>-->
+  <!--</li>-->
+    <!--{{/each}}-->
+  <!--</ul>-->
 </template>
 
 <template name="Ec2Instance">
@@ -27,17 +33,26 @@
           <span class="name">
             {{#if name}}{{name}} ({{InstanceType}}){{else}}{{InstanceType}}{{/if}}
           </span>
-          <a class="ui top right attached mini {{color}} label">{{status}}</a>
+          <a class="ui top right attached mini {{color}} label">{{upperCase status}}</a>
         </div>
       </div>
       <div class="meta">
         <div>
           <span class="id"><a href="{{manageUrl}}">{{_id}}</a></span> @
           <a class="instance" href="http://{{ip}}">{{ip}}</a>
+          (<span class="availabilityZone">{{Placement.AvailabilityZone}}</span>)
         </div>
-        <div>
-          {{Placement.AvailabilityZone}}, {{contractType}}{{#if spot}} (${{SpotPrice}}){{/if}}, launched {{LaunchTime}}
-        </div>
+        <div>Launched: {{LaunchTime}}</div>
+        {{#if spot}}
+          <div>
+            <span class="contract">{{contractType}}{{#if spot}} ${{SpotPrice}}{{/if}})</span>
+          </div>
+        {{/if}}
+        {{#if autoscaleGroup}}
+          <div>
+            Auto Scale group: {{autoscaleGroup}}
+          </div>
+        {{/if}}
       </div>
     </div>
   </div>
