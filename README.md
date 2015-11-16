@@ -4,6 +4,16 @@
 
 Cortex accompanies the WIP book on AWS configuration and deployment, [**Modern Deployment**][book].
 
+> **NOTE**: Although available, Cortex is still **pre-release** and should not even be expected to
+> work just yet. A more stable version will be ready soon and hosted on AWS as per
+> [**Modern Deployment**][book].
+
+![Cortex dashboard view](.docs/screenshots/services.png)
+
+![Cortex EC2 instances](.docs/screenshots/ec2.png)
+
+![Cortex ECS clusters](.docs/screenshots/clusters.png)
+
 
 ## Disclaimer
 
@@ -25,11 +35,13 @@ The following environment variables must be set on the Cortex server:
 * AWS IAM credentials for a user with at least read-only access to EC2, ECS and S3:
   * `AWS_ACCESS_KEY_ID`
   * `AWS_SECREY_ACCESS_KEY`
-* Cortex admin account details:
+* Cortex admin user account details (for login):
   * `METEOR_ADMIN_USERNAME`
   * `METEOR_ADMIN_PASSWORD`
 
-The ECS Task Definition specifications are deliberately incomplete. The missing values will be
+The upcoming multi-tenancy feature will allow Cortex users to register their AWS access credentials within the app, rather than having to set them on the server.
+
+Some of the `/common/configs` specifications are deliberately incomplete. The missing values will be
 populated from the `process.env` of the host machine. Refer to the `/common/configs` to determine
 which environment variables must be set to create new services.
 
