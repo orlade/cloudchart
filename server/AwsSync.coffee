@@ -11,7 +11,7 @@ for key, value of AWS_AUTH
 
 Meteor.startup ->
   AWS.config.update AWS_AUTH
-  AwsSync.sync()
+  # AwsSync.sync()
 
 # Facade for synchronization of AWS services.
 @AwsSync =

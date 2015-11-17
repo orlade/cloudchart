@@ -1,2 +1,2 @@
 @App =
-  name: "Cortex"
+  name: "Cloudogram"
