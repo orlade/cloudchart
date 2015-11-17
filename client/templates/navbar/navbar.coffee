@@ -11,5 +11,7 @@ Template.navbar.events
     log.debug "Syncing all services..."
     Meteor.call 'sync'
 
-  'click .login': -> AccountsUi.goToLogin()
-  'click .logout': -> if confirm 'Are you sure you want to logout?' then Meteor.logout()
+  'click .logout': ->
+    if confirm 'Are you sure you want to logout?'
+      Meteor.logout()
+      Router.go 'home'
