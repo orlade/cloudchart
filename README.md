@@ -67,4 +67,4 @@ If manually hosting an instance of MongoDB:
 1. Also in the `run` command, replace the `MONGO_URL` variable above with `mongodb://db`
 
 
-[book]: https://www.gitbook.com/book/orlade/aws/details
+[book]: https://orlade.gitbooks.io/aws/content/
