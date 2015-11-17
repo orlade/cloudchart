@@ -12,19 +12,29 @@ less
 accounts-google
 service-configuration
 
+# Libraries
 iron:router
 semantic:ui-css
 semantic:ui-icon
+
+# Accounts
 useraccounts:semantic-ui
 useraccounts:iron-routing
+urbanetic:accounts-local
+# urbanetic:accounts-ui
 
+# Utilities
 aldeed:autoform
 matb33:collection-hooks
 momentjs:moment
 aramk:utility
 
+# AWS
 peerlibrary:aws-sdk
 # wylio:winston-papertrail
 
-urbanetic:accounts-local
-# urbanetic:accounts-ui
+
+# Testing
+# sanjo:jasmine
+xolvio:cucumber
+csauer:accounts-phony
