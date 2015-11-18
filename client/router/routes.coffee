@@ -12,16 +12,13 @@ AccountsTemplates.configure defaultLayout: 'ApplicationLayout'
 
 Router.route '/', {name: 'home'}
 Router.route '/dashboard', {name: 'dashboard'}
-Router.route '/login', {name: 'login'}
 Router.route '/services/:id', {name: 'service'}
+Router.route '/profile', {name: 'profile'}
 
 Router.plugin 'ensureSignedIn',
   except: ['home', 'login'].concat _.pluck(AccountsTemplates.routes, 'name')
 
-AccountsTemplates.configureRoute('changePwd')
-AccountsTemplates.configureRoute('enrollAccount')
-AccountsTemplates.configureRoute('forgotPwd')
-AccountsTemplates.configureRoute('resetPwd')
-AccountsTemplates.configureRoute('signIn')
-AccountsTemplates.configureRoute('signUp')
-AccountsTemplates.configureRoute('verifyEmail')
+AccountsTemplates.configureRoute 'signIn',
+  path: '/login'
+  name: 'login'
+  template: 'login'

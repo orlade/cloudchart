@@ -9,6 +9,7 @@ meteor-platform
 coffeescript
 less
 
+accounts-password
 accounts-google
 service-configuration
 

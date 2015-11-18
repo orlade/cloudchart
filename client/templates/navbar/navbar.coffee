@@ -1,3 +1,12 @@
+_initDropdown = ->
+  $('.dropdown').dropdown({on: 'hover', action: 'hide'})
+
+Template.navbar.onRendered -> _initDropdown()
+Accounts.onLogin ->
+  # Ensure the dropdown has been initialized for the new current user.
+  Tracker.flush()
+  _initDropdown()
+
 Template.navbar.helpers
   syncing: -> State.syncing
   active: (routeName) -> "active" if Router.current().route.getName() == routeName

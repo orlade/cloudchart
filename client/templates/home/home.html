@@ -1,7 +1,11 @@
 <template name="home">
   <div id="home">
+    <div class="logo"><img src="{{App.logo}}" alt="{{App.name}} logo" /></div>
+
     <h1>Welcome to {{App.name}}</h1>
 
     <p>Capture your whole cloud in a single image</p>
+
+    <a href="{{pathFor route='dashboard'}}" class="ui huge blue button">Take me to my Dashboard</a>
   </div>
 </template>
