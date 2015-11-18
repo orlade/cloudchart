@@ -4,10 +4,9 @@ Router.configure
     navbar: to: 'header'
     footer: to: 'footer'
   data: -> _.extend State, {App: App}, @params
-  # onBeforeAction: ->
-    # unless Meteor.userId() then Router.go '/login'
-    # @next()
-  # action: -> if @ready() then @render()
+  onAfterAction: ->
+    page = _.last window.location.pathname.split('/')
+    document.title = "#{Strings.toTitleCase Router.current().route.getName()} | #{App.name}"
 
 AccountsTemplates.configure defaultLayout: 'ApplicationLayout'
 
