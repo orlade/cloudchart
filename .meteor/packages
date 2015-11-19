@@ -26,9 +26,10 @@ digilord:roles
 
 # Utilities
 aldeed:autoform
+aramk:utility
+jameslefrere:flash-messages-semantic-ui
 matb33:collection-hooks
 momentjs:moment
-aramk:utility
 
 # AWS
 peerlibrary:aws-sdk

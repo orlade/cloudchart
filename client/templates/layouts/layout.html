@@ -1,14 +1,15 @@
 <head>
-  <title>Cloudogram</title>
+  <title>CloudChart</title>
   <link rel="shortcut icon" type="image/png" href="/images/logo-small.png"/>
 </head>
 
 <template name="ApplicationLayout">
   <div id="wrap">
+    <div class="flash">{{> flashMessages}}</div>
+
     <header>
       {{> yield "header"}}
     </header>
-
 
     <div class="content">
       {{> yield}}

@@ -27,6 +27,10 @@
     Syncer.sync S3Buckets, buckets, true
     log.debug "Finished syncing S3 buckets"
 
+  createBucket: (s3, name) ->
+    {Location} = s3.createBucketSync {Bucket: name}
+    Location
+
 if Meteor.isClient
   Object.defineProperty S3Service, 'buckets', get: -> S3Buckets.find()
   Object.defineProperty S3Service, 'count', get: -> S3Buckets.find().count()
@@ -34,4 +38,12 @@ if Meteor.isClient
 if Meteor.isServer
   Meteor.methods
     's3/createBucket': (name) ->
-      throw new Error "s3/createBucket not implemented"
+      s3 = UserAWS('S3', {region: 'ap-southeast-2'})
+      State.s3Syncing++
+      try
+        location = S3Service.createBucket(s3, name)
+        log.debug "Created bucket #{name} in #{location}"
+        S3Service.syncBuckets(s3)
+        location
+      catch e then throw new Meteor.Error(e.statusCode, "#{e.code}: #{e.message}")
+      finally State.s3Syncing--

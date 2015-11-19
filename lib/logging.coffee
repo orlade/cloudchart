@@ -14,6 +14,12 @@ else
 @log = {}
 log[level] = console[method].bind(console) for level, method of LEVELS
 
+if Meteor.isClient
+	log.error = (args...) ->
+    # Try to extract an error message to display from one of the arguments.
+    FlashMessages.sendError(args[1]?.message ? args[0]?.message ? args)
+    console.error(args...)
+
 ### TODO(orlade): Enable once ready for production.
 
   # Global server logger instance.
