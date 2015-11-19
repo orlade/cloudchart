@@ -16,6 +16,9 @@ GLOBAL_STATE_ID = 'global'
 # Values that should be set when the server side of the app starts up.
 DEFAULT_VALUES =
   syncing: false
+  ec2Syncing: 0
+  ecsSyncing: 0
+  s3Syncing: 0
   ecsConfigInstalling: false
 
 # The collection backing the State object.

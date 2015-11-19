@@ -8,7 +8,10 @@ Accounts.onLogin ->
   _initDropdown()
 
 Template.navbar.helpers
-  syncing: -> State.syncing
+  syncing: -> _.reduce Services, ((z, s) -> z + State["#{s.id}Syncing"]), 0
+  syncingName: ->
+    for id, {name} of Services
+      if State["#{id}Syncing"] then return name
   active: (routeName) -> "active" if Router.current().route.getName() == routeName
 
 Template.navbar.events

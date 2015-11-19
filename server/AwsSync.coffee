@@ -1,5 +1,6 @@
 # Ensure no AWS accounts are authenticated on startup.
-Meteor.startup -> @AwsSync.resetAuth()
+Meteor.startup ->
+  @AwsSync.resetAuth()
 
 # Facade for synchronization of AWS services.
 @AwsSync =
@@ -13,16 +14,13 @@ Meteor.startup -> @AwsSync.resetAuth()
   # Syncs data for the `services` specified by ID. If `services` is not provided, syncs all
   # supported services.
   sync: (services) ->
-    State.syncing = true
     log.info "Syncing AWS service details..."
 
     # Determine which services to sync.
     if services? then services = @services.filter (s) -> _.contains services, s.id
     else services = @services
 
-    try s.sync() for s in services
-    # TODO(orlade): Handle concurrent syncs.
-    finally State.syncing = false
+    s.sync() for s in services
 
 Meteor.methods
   sync: ->

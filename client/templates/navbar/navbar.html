@@ -14,7 +14,8 @@
       {{#if currentUser}}
         <div class="ui item">
           <div class="ui blue labeled icon sync button {{#if syncing}}disabled{{/if}}">
-            <i class="refresh icon"></i> Sync
+            <i class="refresh icon"></i>
+            {{#if syncing}}Syncing {{syncingName}}...{{else}}Sync{{/if}}
           </div>
         </div>
 

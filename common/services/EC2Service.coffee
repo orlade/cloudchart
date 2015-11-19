@@ -5,24 +5,26 @@
   sync: ->
     ec2 = UserAWS('EC2', {region: 'ap-southeast-2'})
 
-    EC2Service.syncInstances(ec2)
+    State.ec2Syncing++
+    try EC2Service.syncInstances(ec2)
 #    EC2Service.syncSpotPrices(ec2)
+    finally State.ec2Syncing--
 
   syncInstances: (ec2) ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
     log.debug "Syncing EC2 instances..."
 
-    ec2.describeInstances Meteor.bindEnvironment (err, {Reservations}) ->
-      docs = (new EC2Instance(inst) for inst in _.flatten _.pluck(Reservations, 'Instances'))
-      Syncer.sync EC2Instances, docs, true
-      log.debug "Finished syncing EC2 instances"
+    {Reservations} = ec2.describeInstancesSync()
+    docs = (new EC2Instance(inst) for inst in _.flatten _.pluck(Reservations, 'Instances'))
+    Syncer.sync EC2Instances, docs, true
+    log.debug "Finished syncing EC2 instances"
 
   # Looks up the latest spot price relevant for the current instances.
   syncSpotPrices: (ec2) ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
     log.debug "Syncing EC2 spot prices..."
 
-    instances = EC2Instances.find({userId: Meteor.userId}).fetch()
+    instances = EC2Instances.find({userId: Meteor.userId()}).fetch()
     azTypes = {}
     for instance in instances when instance.spot
       types = azTypes[instance.Placement.AvailabilityZone]
@@ -41,14 +43,11 @@
           Values: [az]
         }]
 
-      handleResult = Meteor.bindEnvironment (err, res) ->
-        if err then console.log "ERROR: Failed to get spot prices for", params, err
-        else for price in res.SpotPriceHistory
-          for instance in azTypes[price.AvailabilityZone][price.InstanceType]
-            EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
-
-      new AWS.EC2({region: Region.azToRegion(az)}).describeSpotPriceHistory params, handleResult
-    azTypes
+      azec2 = UserAWS('EC2', {region: Region.azToRegion(az)})
+      {SpotPriceHistory} = azec2.describeSpotPriceHistorySync(params)
+      for price in SpotPriceHistory
+        for instance in azTypes[price.AvailabilityZone][price.InstanceType]
+          EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
 
 
 if Meteor.isClient
