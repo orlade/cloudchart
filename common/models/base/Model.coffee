@@ -1,7 +1,9 @@
 class @Model
   _mapping: null
 
-  constructor: (source) -> @mapMerge source
+  constructor: (source, @userId) ->
+    @userId ?= Meteor.userId()
+    @mapMerge source
 
   # Merges the properties of the `source` object into this model, applying any transformations
   # defined in the `mapping` object. If no `mapping` is provided, this object's `mapping` field will

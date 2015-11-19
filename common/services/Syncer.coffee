@@ -15,10 +15,10 @@
     # Add new docs.
     deltas = for doc in docs
       [mapping, doc._mapping] = [doc._mapping, undefined]
-      delta = collection.upsert doc._id, $set: doc
+      delta = collection.upsert(doc._id, $set: doc)?.numberAffected ? 0
       doc._mapping = mapping
       delta
-    count = deltas.reduce ((z, d) -> z + (d.numAffected ? 0)), 0
+    count = deltas.reduce ((z, d) -> z + d), 0
     slog if count > 0 then "Updated #{count} docs" else "No updates"
 
     # Remove obsolete docs.

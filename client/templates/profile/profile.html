@@ -5,6 +5,39 @@
     <tbody>
       <tr><th>Name</th><td>{{name}}</td></tr>
       <tr><th>Email</th><td>{{email}}</td></tr>
+      <tr>
+        <th>AWS Credentials</th>
+        <td>
+          {{#if awsSet}}
+          <div class="ui blue aws change labeled icon button">
+            <i class="ui privacy icon"></i> Change Access Key
+          </div>
+          {{else}}
+          <div class="ui yellow aws set labeled icon button">
+            <i class="ui privacy icon"></i> Set Access Key
+          </div>
+          {{/if}}
+        </td>
+      </tr>
     </tbody>
   </table>
+
+  <div class="ui aws modal">
+    <div class="ui segment">
+      <h2>Enter AWS Credentials</h2>
+
+      <form id="aws-form" class="ui aws form">
+        <div class="field">
+          <label>Access Key ID</label>
+          <input type="text" name="accessKeyId" />
+        </div>
+        <div class="field">
+          <label>Secret Access Key</label>
+          <input type="text" name="secretAccessKey" />
+        </div>
+        <button class="ui submit button" type="submit">Submit</button>
+        <button class="ui cancel button">Cancel</button>
+      </form>
+    </div>
+  </div>
 </template>

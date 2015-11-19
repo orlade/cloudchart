@@ -7,10 +7,10 @@ COLLECTIONS = [
 
 # Publish on the server.
 if Meteor.isServer
-  Meteor.publish 'ec2-instances', -> EC2Instances.find()
-  Meteor.publish 'ecs-task-definition-families', -> ECSTaskDefinitionFamilies.find()
-  Meteor.publish 'ecs-clusters', -> ECSClusters.find()
-  Meteor.publish 's3-buckets', -> S3Buckets.find()
+  Meteor.publish 'ec2-instances', -> EC2Instances.find({userId: @userId})
+  Meteor.publish 'ecs-task-definition-families', -> ECSTaskDefinitionFamilies.find({userId: @userId})
+  Meteor.publish 'ecs-clusters', -> ECSClusters.find({userId: @userId})
+  Meteor.publish 's3-buckets', -> S3Buckets.find({userId: @userId})
 # Subscribe on the client.
 else Meteor.subscribe(c) for c in COLLECTIONS
 

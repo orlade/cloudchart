@@ -1,36 +1,3 @@
-ecs = new AWS.ECS({region: 'ap-southeast-2'}) if Meteor.isServer
-
-# Mappings of AWS property names to more convenient ones.
-MAPPINGS =
-  CLUSTER:
-    clusterArn: '_id'
-    clusterName: 'name'
-
-  SERVICE:
-    serviceArn: '_id'
-    serviceName: 'name'
-    taskDefinition: (service, tdArn) -> service.taskdefName = _.last tdArn.split('/')
-
-  TASK:
-    taskArn: (task, arn) ->
-      task._id = arn
-      task.taskId = _.last arn.split('/')
-    lastStatus: 'status'
-    containers: (task, containers) -> task.errors = (c.reason for c in containers when c.reason?)
-    # Extract the task definition family and revision as the "name" of the task.
-    taskDefinitionArn: (task, tdArn) -> task.name = _.last tdArn.split('/')
-
-  TASK_DEFINITION:
-    taskDefinitionArn : '_id'
-
-mapMerge = (destination, source, mapping) ->
-  for sourceKey, destKey of mapping
-    if sourceKey of source
-      if typeof destKey == 'string' then destination[destKey] = source[sourceKey]
-      # If the destination key is a function, apply it and let it write the correct property.
-      else if typeof destKey == 'function' then destKey(destination, source[sourceKey])
-  destination
-
 @ECSSyncService =
   id: 'ecs'
   name: 'ECS'
@@ -38,10 +5,11 @@ mapMerge = (destination, source, mapping) ->
   checkClient: -> if Meteor.isClient then throw new Error "Cannot sync data from client"
 
   sync: ->
-    ECSSyncService.syncClusters()
-    ECSSyncService.syncTaskDefs()
+    ecs = UserAWS('ECS', {region: 'ap-southeast-2'}) if Meteor.isServer
+    ECSSyncService.syncClusters(ecs)
+    ECSSyncService.syncTaskDefs(ecs)
 
-  syncTaskDefs: ->
+  syncTaskDefs: (ecs) ->
     @checkClient()
     log.debug "Syncing task definitions..."
     ecs.listTaskDefinitionFamilies Meteor.bindEnvironment (err, data) ->
@@ -61,7 +29,7 @@ mapMerge = (destination, source, mapping) ->
       Syncer.sync ECSTaskDefinitionFamilies, families
       log.debug "Finished syncing ECS task definitions"
 
-  syncClusters: ->
+  syncClusters: (ecs) ->
     @checkClient()
     log.debug "Syncing clusters..."
     ecs.listClusters Meteor.bindEnvironment (err, {clusterArns}) ->
@@ -100,11 +68,14 @@ mapMerge = (destination, source, mapping) ->
     ecs.updateServiceSync {service: service, cluster: cluster, desiredCount: count}
 #    Syncer.sync 'ecs'
 
-Object.defineProperty ECSSyncService, 'taskdefs', get: -> ECSTaskDefinitionFamilies.find()
-Object.defineProperty ECSSyncService, 'clusters', get: -> ECSClusters.find()
+if Meteor.isClient
+  Object.defineProperty ECSSyncService, 'taskdefs', get: -> ECSTaskDefinitionFamilies.find()
+  Object.defineProperty ECSSyncService, 'clusters', get: -> ECSClusters.find()
 
-Object.defineProperty ECSSyncService, 'count', get: -> ECSClusters.find().count()
+  Object.defineProperty ECSSyncService, 'count', get: -> ECSClusters.find().count()
 
 if Meteor.isServer
   Meteor.methods
-    'ecs/scale': (args...) -> ECSSyncService.scale args...
+    'ecs/scale': (args...) ->
+      ECSSyncService.scale args...
+      true

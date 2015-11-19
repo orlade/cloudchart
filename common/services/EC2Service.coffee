@@ -1,14 +1,14 @@
-ec2 = new AWS.EC2({region: 'ap-southeast-2'})
-
 @EC2Service =
   id: 'ec2'
   name: 'EC2'
 
   sync: ->
-    EC2Service.syncInstances()
-#    EC2Service.syncSpotPrices()
+    ec2 = UserAWS('EC2', {region: 'ap-southeast-2'})
 
-  syncInstances: ->
+    EC2Service.syncInstances(ec2)
+#    EC2Service.syncSpotPrices(ec2)
+
+  syncInstances: (ec2) ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
     log.debug "Syncing EC2 instances..."
 
@@ -18,11 +18,11 @@ ec2 = new AWS.EC2({region: 'ap-southeast-2'})
       log.debug "Finished syncing EC2 instances"
 
   # Looks up the latest spot price relevant for the current instances.
-  syncSpotPrices: ->
+  syncSpotPrices: (ec2) ->
     if Meteor.isClient then return log.warn "Cannot sync data from client"
     log.debug "Syncing EC2 spot prices..."
 
-    instances = EC2Instances.find().fetch()
+    instances = EC2Instances.find({userId: Meteor.userId}).fetch()
     azTypes = {}
     for instance in instances when instance.spot
       types = azTypes[instance.Placement.AvailabilityZone]
@@ -51,19 +51,19 @@ ec2 = new AWS.EC2({region: 'ap-southeast-2'})
     azTypes
 
 
+if Meteor.isClient
+  Object.defineProperties EC2Service,
+    # The number of EC2 instances.
+    count: get: -> EC2Instances.find().count()
+    # The existing EC2 instances.
+    instances: get: -> EC2Instances.find()
 
-Object.defineProperties EC2Service,
-  # The number of EC2 instances.
-  count: get: -> EC2Instances.find().count()
-  # The existing EC2 instances.
-  instances: get: -> EC2Instances.find()
-
-  # Elastic Load Balancer (ELB) instances.
-  elbs: get: ->
-  # EC2 instance launch configurations.
-  launchConfigs: get: ->
-  # Auto-Scaling Group (ASG) instances.
-  asgs: get: ->
+    # Elastic Load Balancer (ELB) instances.
+    elbs: get: ->
+    # EC2 instance launch configurations.
+    launchConfigs: get: ->
+    # Auto-Scaling Group (ASG) instances.
+    asgs: get: ->
 
 Meteor.methods
-  syncSpotPrices: -> if Meteor.isServer then EC2Service.syncSpotPrices()
+  syncSpotPrices: -> if Meteor.isServer then EC2Service.syncSpotPrices() and true

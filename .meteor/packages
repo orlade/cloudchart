@@ -22,7 +22,7 @@ semantic:ui-icon
 useraccounts:semantic-ui
 useraccounts:iron-routing
 urbanetic:accounts-local
-# urbanetic:accounts-ui
+digilord:roles
 
 # Utilities
 aldeed:autoform
