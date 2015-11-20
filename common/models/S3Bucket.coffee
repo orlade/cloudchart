@@ -10,5 +10,5 @@ class @S3Bucket extends Model
     Name: (bucket, name) -> bucket._id = bucket.Name = name
 
   constructor: ->
-    super arguments...
     @_collection = S3Buckets
+    super arguments...

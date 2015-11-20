@@ -27,7 +27,9 @@ class @Model
       callback ?= (err, res) ->
         if err then log.error "Error creating new #{@_type}", err
       Meteor.call @_methods.create, @.toJSON(), callback
-    else throw new Error "Create not implemented for #{@_type}"
+    else
+      error = new Error "Create not implemented for #{@_type}"
+      if callback then callback error else throw error
 
   # Merges the properties of the `source` object into this model, applying any transformations
   # defined in the `mapping` object. If no `mapping` is provided, this object's `mapping` field will

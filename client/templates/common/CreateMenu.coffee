@@ -15,37 +15,39 @@ Template.CreateMenu.onCreated ->
   @customHooks ?= {}
 
 Template.CreateMenu.onRendered ->
-  @data.customModal ?= $(".#{@data.type}.modal")
-  $('.btn').addClass('ui button')
+  # Handles a click of the Custom item by displaying the modal provided to the template. If the
+  # modal contains a form (as expected), when the form is submitted the template handler will invoke
+  # a `customHook` indexed by the `type`. Parent forms can register callbacks in using
+  # `Template.CreateMenu.onCreated -> @customHook[<type>] = (formValues, callback -> ...)`.
+  @modal = @$(".#{@data.type}.modal")
+  @form = @$("form", @modal)
+  @modal.modal({onHide: => @form?.form('clear')})
+
+  # TODO: Figure out why form seems to submit twice when pressing enter without breakpoints.
+  @form?.submit (event) =>
+    # Stop the form from actually submitting and refreshing the page.
+    event.preventDefault()
+    hook = @customHooks[@data.type]
+    if hook
+      # Helper functions to pause and resume interactivity of the form after submission.
+      disable = => @form.find('.field, button').addClass('disabled')
+      enable = (err, res) =>
+        log.error(err) if err
+        @form.find('.field, button').removeClass('disabled')
+
+      disable()
+      try hook @form.form('get values'), enable
+      catch ex then enable(ex)
+    else log.warn "No hook for submitting #{@data.type} form"
 
 Template.CreateMenu.helpers
   # Returns whether to render a divider after the current item.
-  divide: (allItems) -> @customModal or _.last(allItems) != @
+  divide: (allItems) -> @customSchema or _.last(allItems) != @
 
   # Returns `'disabled'` if the menu button should be disabled, or `''` otherwise.
-  disabled: -> if not @customModal and _.isEmpty @items then 'disabled' else ''
+  disabled: -> if not @customSchema and _.isEmpty @items then 'disabled' else ''
 
   formId: -> "#{@type}CustomForm"
 
-  hasCustomModal: ->
-    log.debug 'hascm', @customModal, $(".#{@type}.modal")
-    @customModal or not _.isEmpty $(".#{@type}.modal")
-
 Template.CreateMenu.events
-  # Handles a click of the Custom item by displaying the modal provided to the template. If the
-  # contains a form (as expected), when the form is submitted the template handler will invoke a
-  # hook called `{{type}}FormSubmitted` on the `CreateMenu` template.
-  'click .custom.item': (event, template) ->
-    modal = $(".#{@type}.modal")
-    form = $("form", modal)
-    log.info @, arguments, form, modal
-    modal.modal('show').modal({onHide: -> form?.form('clear')})
-    form?.submit (e) =>
-      e.preventDefault()
-      hook = template.customHooks[@type]
-      if hook
-        form.find('.field, button').addClass('disabled')
-        hook form.form('get values'), (err, res) ->
-          log.error(err) if err
-          form.find('.field, button').removeClass('disabled')
-      else log.warn "No hook for submitting #{@type} form"
+  'click .custom.item': (event, template) -> template.modal.modal('show')
