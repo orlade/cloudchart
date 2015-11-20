@@ -1,9 +1,22 @@
 <template name="ec2">
-  <h1>AWS EC2</h1>
 
-  <div class="ui four stackable cards">
+  <div class="ui grid">
+    <div class="eight wide left aligned column">
+      <h1>AWS EC2</h1>
+    </div>
+    <div class="eight wide right aligned column">
+      <div class="ui secondary menu">
+        {{> CreateMenu type="lc" label="Launch Configuration" items=lcItems customSchema=lcSchema}}
+        {{> CreateMenu type="asg" label="Auto Scaling Group" items=asgItems}}
+        {{> CreateMenu type="elb" label="ELB" items=elbItems}}
+        {{> CreateMenu type="instance" label="Instance" items=instanceItems}}
+      </div>
+    </div>
+  </div>
+
+  <div class="ui stackable cards">
     {{#each instances}}
-      {{> EC2InstanceTemplate }}
+      {{> EC2InstanceTemplate}}
     {{/each}}
   </div>
 </template>

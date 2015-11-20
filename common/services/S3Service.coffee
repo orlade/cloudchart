@@ -37,12 +37,12 @@ if Meteor.isClient
 
 if Meteor.isServer
   Meteor.methods
-    's3/createBucket': (name) ->
+    's3/createBucket': (bucket) ->
       s3 = UserAWS('S3', {region: 'ap-southeast-2'})
       State.s3Syncing++
       try
-        location = S3Service.createBucket(s3, name)
-        log.debug "Created bucket #{name} in #{location}"
+        location = S3Service.createBucket(s3, bucket.Name)
+        log.debug "Created bucket #{bucket.Name} in #{location}"
         S3Service.syncBuckets(s3)
         location
       catch e then throw new Meteor.Error(e.statusCode, "#{e.code}: #{e.message}")

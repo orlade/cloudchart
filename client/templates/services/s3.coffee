@@ -1,43 +1,27 @@
 Template.s3.helpers
   buckets: -> S3Service.buckets
-
-Template.S3Actions.helpers
-  suggestions: ->
-    unless Meteor.user() then return []
+  bucketItems: ->
     buckets = [{
-      name: Meteor.user().emails[0].address.split('@')[1]
-      icon: 'world'
-    }, {
-      name: 'config'
-      icon: 'setting'
+      name: "Suggestions"
+      items: [
+        {name: Meteor.user()?.emails[0].address.split('@')[1], icon: 'world'}
+        {name: 'config', icon: 'setting'}
+      ]
     }]
-
     existing = _.pluck(S3Buckets.find({}, {fields: name: true}).fetch(), 'name')
-    buckets.filter ({name}) -> name not in existing
+    for group in buckets
+      # Remove any items that have the same name as an existing bucket.
+      for i in [group.items.length - 1..0]
+        if group.items[i].name in existing then group.items[i..i] = []
+    buckets
 
-Template.S3Actions.events
-  'click .create.item': ->
-    Meteor.call 's3/createBucket', name, (err, res) ->
-      if err then return log.error "Error creating new S3 bucket #{name}", err
+  bucketSchema: -> new SimpleSchema {Name: {type: String}}
 
-  'click .custom.item': ->
-    [modal, form] = [$('.create.modal'), $('.create.form')]
-    log.info form, modal
-    modal.modal('show').modal({onHide: -> form.form('clear')})
-    form.submit (e) ->
-      e.preventDefault()
-      form.find('.field, button').addClass('disabled')
-      name = form.form('get value', 'name')
-      Meteor.call 's3/createBucket', name, (err, res) ->
-        form.find('.field, button').removeClass('disabled')
-        if err then return log.error err
-        modal.modal('hide')
+Template.s3.events
+  'click .create.bucket .create.item': -> new S3Bucket({Name: @name}).create()
+
+Template.CreateMenu.onCreated ->
+  @customHooks['bucket'] = (formValues, callback) -> new S3Bucket(formValues).create(callback)
 
 Template.S3BucketTemplate.helpers
   manageUrl: -> "https://console.aws.amazon.com/s3/home?region=ap-southeast-2#&bucket=#{@_id}&prefix="
-
-Template.s3.events
-  'click .create.button .menu': ->
-
-Template.s3.onRendered ->
-  $('.create.card .content').dimmer({on: 'hover'})

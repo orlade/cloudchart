@@ -1,8 +1,14 @@
 <template name="s3">
 
   <div class="ui grid">
-    <div class="eight wide left aligned column"><h1>AWS S3</h1></div>
-    <div class="eight wide right aligned column">{{> S3Actions}}</div>
+    <div class="eight wide left aligned column">
+      <h1>AWS S3</h1>
+    </div>
+    <div class="eight wide right aligned column">
+      <div class="ui secondary menu">
+        {{> CreateMenu type="bucket" label="Bucket" items=bucketItems customSchema=bucketSchema}}
+      </div>
+    </div>
   </div>
 
   <div class="ui stackable link cards">
@@ -15,40 +21,6 @@
       </div>
     </div>
     {{/each}}
-  </div>
-</template>
-
-<template name="S3Actions">
-  <div class="ui secondary menu">
-    <div class="ui blue labeled icon dropdown create button">
-      <i class="plus icon"></i> Create Bucket
-      <div class="menu">
-        <div class="header">Suggestions</div>
-        {{#each suggestions}}
-          <div class="create item">
-            <i class="{{icon}} icon"></i> {{name}}
-          </div>
-        {{/each}}
-        <div class="divider"></div>
-        <div class="custom item">
-          <i class="plus icon"></i> Custom
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ui small create modal">
-    <div class="ui segment">
-      <h2>Create a new S3 bucket</h2>
-
-      <form class="ui create form">
-        <div class="field">
-          <label>Bucket name</label>
-          <input type="text" name="name" />
-        </div>
-        <button class="ui submit button" type="submit">Submit</button>
-      </form>
-    </div>
   </div>
 </template>
 

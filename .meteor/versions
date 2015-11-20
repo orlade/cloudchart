@@ -24,6 +24,7 @@ deps@1.0.7
 digilord:roles@1.2.12
 ejson@1.0.6
 email@1.0.6
+fabienb4:autoform-semantic-ui@0.5.0
 fastclick@1.0.3
 geojson-utils@1.0.3
 google@1.1.5

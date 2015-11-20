@@ -1,9 +1,33 @@
 class @Model
+  # Override in subclasses to use in methods.
+  _type: "Model"
+  _collection: null
+  _createMethod: null
+
   _mapping: null
 
   constructor: (source, @userId) ->
     @userId ?= Meteor.userId()
     @mapMerge source
+
+  # Saves the model into the app database. Requires that the `_id` and `userId` be set.
+  save: ->
+    check @_id, String
+    check userId, String
+    check @_collection, Object
+
+    @_collection.upsert @_id, @
+
+  # Requests the creation in AWS of the entity represented by this object. Calls a Meteor method
+  # since creation can only happen server-side.
+  create: (callback) ->
+    if @_id? then log.warn "Creating #{@_type} with existing ID #{@_id}"
+    if @_methods?.create
+      log.debug "Creating #{@_type}", @
+      callback ?= (err, res) ->
+        if err then log.error "Error creating new #{@_type}", err
+      Meteor.call @_methods.create, @.toJSON(), callback
+    else throw new Error "Create not implemented for #{@_type}"
 
   # Merges the properties of the `source` object into this model, applying any transformations
   # defined in the `mapping` object. If no `mapping` is provided, this object's `mapping` field will
@@ -27,3 +51,10 @@ class @Model
       mappedKey = mapping?[sourceKey]
       if mappedKey? then write mappedKey, sourceValue
     @
+
+  # Filter out the properties of this object that shouldn't be persisted.
+  toJSON: ->
+    json = {}
+    for key, value of @ when key[0] != '_' or key == '_id'
+      json[key] = value
+    json

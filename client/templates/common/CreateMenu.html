@@ -1,0 +1,42 @@
+<template name="CreateMenu">
+  <div class="ui blue labeled icon dropdown create {{type}} button {{disabled}}">
+    <i class="plus icon"></i> {{label}}
+    <div class="menu">
+      {{#each items}}
+        {{#if items}}
+          <div class="header">{{name}}</div>
+          {{#each items}}
+          <div class="create item">
+            <i class="{{icon}} icon"></i> {{name}}
+          </div>
+          {{else}}
+          <div class="empty item">No items</div>
+          {{/each}}
+        {{else}}
+        <div class="create item">
+          <i class="{{icon}} icon"></i> {{name}}
+        </div>
+        {{/if}}
+
+        {{#if divide ../items}}
+        <div class="divider"></div>
+        {{/if}}
+      {{/each}}
+
+      {{#if customSchema}}
+      <div class="custom item">
+        <i class="plus icon"></i> Custom
+      </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if customSchema}}
+  <div class="ui small create {{type}} modal">
+    <div class="ui segment">
+      <h2>Create a new {{label}}</h2>
+      {{> quickForm schema=customSchema id=formId}}
+    </div>
+  </div>
+  {{/if}}
+</template>

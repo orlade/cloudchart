@@ -15,6 +15,8 @@ service-configuration
 
 # Libraries
 iron:router
+momentjs:moment
+peerlibrary:aws-sdk
 semantic:ui-css
 semantic:ui-icon
 
@@ -27,14 +29,10 @@ digilord:roles
 # Utilities
 aldeed:autoform
 aramk:utility
+fabienb4:autoform-semantic-ui
 jameslefrere:flash-messages-semantic-ui
 matb33:collection-hooks
-momentjs:moment
-
-# AWS
-peerlibrary:aws-sdk
 # wylio:winston-papertrail
-
 
 # Testing
 # sanjo:jasmine
