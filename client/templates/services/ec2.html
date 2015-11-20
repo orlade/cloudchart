@@ -7,7 +7,7 @@
     <div class="eight wide right aligned column">
       <div class="ui secondary menu">
         {{> CreateMenu type="lc" label="Launch Configuration" items=lcItems customSchema=lcSchema}}
-        {{> CreateMenu type="asg" label="Auto Scaling Group" items=asgItems}}
+        {{> CreateMenu type="asg" label="Auto Scaling Group" items=asgItems customSchema=asgSchema}}
         {{> CreateMenu type="elb" label="ELB" items=elbItems}}
         {{> CreateMenu type="instance" label="Instance" items=instanceItems}}
       </div>

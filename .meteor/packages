@@ -16,9 +16,13 @@ service-configuration
 # Libraries
 iron:router
 momentjs:moment
-peerlibrary:aws-sdk
 semantic:ui-css
 semantic:ui-icon
+
+# AWS
+peerlibrary:aws-sdk
+orlade:aws-schema
+orlade:aws-collections
 
 # Accounts
 useraccounts:semantic-ui

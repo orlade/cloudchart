@@ -1,0 +1,1 @@
+class ECSTaskDefinition extends AWSModel

@@ -1,4 +1,4 @@
-class @ECSTask extends Model
+class ECSTask extends AWSModel
   _mapping:
     taskArn: (task, arn) ->
       task._id = arn

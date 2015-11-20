@@ -1,24 +1,24 @@
 <template name="CreateMenu">
-  <div class="ui blue labeled icon dropdown create {{type}} button {{disabled}}">
+  <div class="ui blue labeled icon simple dropdown create {{type}} button {{disabled}}">
     <i class="plus icon"></i> {{label}}
     <div class="menu">
       {{#each items}}
         {{#if items}}
-          <div class="header">{{name}}</div>
+          <div class="header">{{label}}</div>
           {{#each items}}
           <div class="create item">
-            <i class="{{icon}} icon"></i> {{name}}
+            <i class="{{icon}} icon"></i> {{label}}
           </div>
           {{else}}
           <div class="empty item">No items</div>
           {{/each}}
         {{else}}
         <div class="create item">
-          <i class="{{icon}} icon"></i> {{name}}
+          <i class="{{icon}} icon"></i> {{label}}
         </div>
         {{/if}}
 
-        {{#if divide ../items}}
+        {{#if divide ..}}
         <div class="divider"></div>
         {{/if}}
       {{/each}}

@@ -1,4 +1,4 @@
-class @ECSService extends Model
+class ECSService extends AWSModel
   _mapping:
     serviceArn: '_id'
     serviceName: 'name'

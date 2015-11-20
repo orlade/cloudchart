@@ -1,4 +1,4 @@
-class @Model
+class AWSModel
   # Override in subclasses to use in methods.
   _type: "Model"
   _collection: null
@@ -56,7 +56,12 @@ class @Model
 
   # Filter out the properties of this object that shouldn't be persisted.
   toJSON: ->
+    filter = (key, value) ->
+      if key[0] == '_' and key != '_id' then return false
+      if key in ['userId', 'icon'] then return false
+      true
+
     json = {}
-    for key, value of @ when key[0] != '_' or key == '_id'
+    for key, value of @ when filter(key, value)
       json[key] = value
     json

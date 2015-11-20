@@ -1,4 +1,4 @@
-class @S3Bucket extends Model
+class S3Bucket extends AWSModel
   _type: "Bucket"
   _methods:
     create: 's3/createBucket'

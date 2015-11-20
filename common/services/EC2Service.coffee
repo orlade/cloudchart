@@ -49,6 +49,14 @@
         for instance in azTypes[price.AvailabilityZone][price.InstanceType]
           EC2Instances.update instance._id, $set: 'SpotPrice': price.SpotPrice
 
+  createLaunchConfiguration: (as, lc) ->
+    EC2LaunchConfigurations.simpleSchema().clean(lc)
+    delete lc._id
+    log.debug "Creating launch configuration", lc
+    data = as.createLaunchConfigurationSync lc
+    log.debug "Created", data
+    data
+
 
 if Meteor.isClient
   Object.defineProperties EC2Service,
@@ -64,5 +72,13 @@ if Meteor.isClient
     # Auto-Scaling Group (ASG) instances.
     asgs: get: ->
 
-Meteor.methods
-  syncSpotPrices: -> if Meteor.isServer then EC2Service.syncSpotPrices() and true
+if Meteor.isServer
+  Meteor.methods
+    syncSpotPrices: ->
+      EC2Service.syncSpotPrices()
+      true
+
+    'ec2/createLaunchConfiguration': (lc) ->
+      as = new UserAWS('AutoScaling', {region: 'ap-southeast-2'})
+      EC2Service.createLaunchConfiguration(as, lc)
+      true

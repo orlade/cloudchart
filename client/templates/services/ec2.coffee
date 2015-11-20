@@ -1,17 +1,19 @@
 Template.ec2.helpers
   instances: -> EC2Service.instances
-  lcItems: -> [{
-      name: "Suggestions"
-      items: [{name: 'Micro', icon: 'cube'}]
+  lcItems: ->
+    # TODO: Display custom form to customise blueprint parameters.
+    ecsMicro = Blueprints.EC2LaunchConfigurations.ecsMicro
+      ecsConfigPath: 'cloudchart-config/ecs/ecs.config'
+
+    [{
+      label: "Suggestions"
+      items: [{label: ecsMicro.name, icon: 'cube', value: ecsMicro}]
     }]
-  lcSchema: -> new SimpleSchema
-    name:
-      type: String,
-      label: "Name",
-      max: 50
+  lcSchema: -> EC2LaunchConfiguration.schema
+  asgSchema: -> AutoScalingGroup.schema
 
 Template.ec2.events
-  'click .create.lc .create.item': -> new EC2LaunchConfiguration(@).create()
+  'click .create.item': -> @value.create()
 
 Template.CreateMenu.onCreated ->
   @customHooks['lc'] = (formValues, callback) ->

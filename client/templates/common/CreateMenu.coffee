@@ -14,11 +14,25 @@ Template.CreateMenu.onCreated ->
   # TODO: Refactor form to a new template/class.
   @customHooks ?= {}
 
-Template.CreateMenu.onRendered ->
-  # Handles a click of the Custom item by displaying the modal provided to the template. If the
-  # modal contains a form (as expected), when the form is submitted the template handler will invoke
-  # a `customHook` indexed by the `type`. Parent forms can register callbacks in using
-  # `Template.CreateMenu.onCreated -> @customHook[<type>] = (formValues, callback -> ...)`.
+Template.CreateMenu.onRendered -> initForm.bind(@)()
+
+Template.CreateMenu.helpers
+  # Returns whether to render a divider after the current item.
+  divide: (data) -> data.customSchema or @ != _.last(data.items)
+
+  # Returns `'disabled'` if the menu button should be disabled, or `''` otherwise.
+  disabled: -> if not @customSchema and _.isEmpty @items then 'disabled' else ''
+
+  formId: -> "#{@type}CustomForm"
+
+Template.CreateMenu.events
+  'click .custom.item': (event, template) -> template.modal.modal('show')
+
+# Handles a click of the Custom item by displaying the modal provided to the template. If the
+# modal contains a form (as expected), when the form is submitted the template handler will invoke
+# a `customHook` indexed by the `type`. Parent forms can register callbacks in using
+# `Template.CreateMenu.onCreated -> @customHook[<type>] = (formValues, callback -> ...)`.
+initForm = ->
   @modal = @$(".#{@data.type}.modal")
   @form = @$("form", @modal)
   @modal.modal({onHide: => @form?.form('clear')})
@@ -39,15 +53,3 @@ Template.CreateMenu.onRendered ->
       try hook @form.form('get values'), enable
       catch ex then enable(ex)
     else log.warn "No hook for submitting #{@data.type} form"
-
-Template.CreateMenu.helpers
-  # Returns whether to render a divider after the current item.
-  divide: (allItems) -> @customSchema or _.last(allItems) != @
-
-  # Returns `'disabled'` if the menu button should be disabled, or `''` otherwise.
-  disabled: -> if not @customSchema and _.isEmpty @items then 'disabled' else ''
-
-  formId: -> "#{@type}CustomForm"
-
-Template.CreateMenu.events
-  'click .custom.item': (event, template) -> template.modal.modal('show')

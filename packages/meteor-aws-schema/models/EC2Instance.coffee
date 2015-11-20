@@ -3,7 +3,7 @@ TAG_KEY_MAP =
   Name: 'name'
   'aws:autoscaling:groupName': 'autoscaleGroup'
 
-class @EC2Instance extends Model
+class EC2Instance extends AWSModel
   _mapping:
     InstanceId: '_id'
     PublicIpAddress: 'ip'

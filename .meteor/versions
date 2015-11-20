@@ -8,7 +8,7 @@ aldeed:simple-schema@1.3.3
 amplify@1.0.0
 aramk:q@1.0.1_1
 aramk:tinycolor@1.1.0_1
-aramk:utility@0.9.0
+aramk:utility@0.11.0
 autoupdate@1.2.1
 base64@1.0.3
 binary-heap@1.0.3
@@ -49,7 +49,7 @@ less@1.0.14
 livedata@1.0.13
 localstorage@1.0.3
 logging@1.0.7
-matb33:collection-hooks@0.7.15
+matb33:collection-hooks@0.8.0
 meteor@1.1.6
 meteor-platform@1.2.2
 minifiers@1.1.5
@@ -63,6 +63,8 @@ oauth@1.1.4
 oauth2@1.1.3
 observe-sequence@1.0.6
 ordered-dict@1.0.3
+orlade:aws-collections@0.0.1
+orlade:aws-schema@0.0.1
 package-version-parser@3.0.3
 peerlibrary:aws-sdk@2.2.6_1
 peerlibrary:blocking@0.5.2
