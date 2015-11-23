@@ -4,7 +4,7 @@
   # Syncs `models` into `collection` and reports on the changes. If `complete` is `true`, then it is
   # assumes that `models` represents all the docs that should be in the database. Any docs in the
   # database that are not in `models` will be removed from the database.
-  sync: Meteor.bindEnvironment (collection, models, complete=false) ->
+  sync: (collection, models, complete=false) ->
     # Helper function for logging with collection name prefix.
     slog = (args...) -> log.debug("[#{collection._name}]:", args...)
 
@@ -15,8 +15,7 @@
     # Add new models.
     deltas = for model in models
       doc = collection.simpleSchema().clean(model)
-      delta = collection.upsert(doc._id, {$set: doc}, {validate: false})?.numberAffected ? 0
-      delta
+      collection.upsert(doc._id, {$set: doc})?.numberAffected ? 0
     count = deltas.reduce ((z, d) -> z + d), 0
     slog if count > 0 then "Updated #{count} docs" else "No updates"
 

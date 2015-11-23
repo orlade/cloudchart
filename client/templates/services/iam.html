@@ -1,0 +1,40 @@
+<template name="iam">
+
+  <div class="ui grid">
+    <div class="eight wide left aligned column">
+      <h1>AWS IAM</h1>
+    </div>
+    <div class="eight wide right aligned column">
+      <div class="ui secondary menu">
+        {{> CreateMenu type="role" label="Role" items=roleItems customSchema=roleSchema}}
+      </div>
+    </div>
+  </div>
+
+  <div class="ui stackable link cards">
+    {{#each roles}}
+      {{> IAMRoleTemplate}}
+    {{else}}
+    <div class="empty card">
+      <div class="content">
+        <div class="header">No roles</div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="IAMRoleTemplate">
+  <div class="card">
+    <a href="{{manageUrl}}" target="_blank">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span class="name">{{RoleName}}</span>
+        </div>
+      </div>
+      <!-- TODO: representation of policy -->
+    </div>
+    </a>
+  </div>
+</template>

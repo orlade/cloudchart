@@ -15,7 +15,8 @@
     log.debug "Syncing EC2 instances..."
 
     {Reservations} = ec2.describeInstancesSync()
-    docs = (new EC2Instance(inst) for inst in _.flatten _.pluck(Reservations, 'Instances'))
+    Instances = _.flatten _.pluck(Reservations, 'Instances')
+    docs = (new EC2Instance(instance) for instance in Instances)
     Syncer.sync EC2Instances, docs, true
     log.debug "Finished syncing EC2 instances"
 

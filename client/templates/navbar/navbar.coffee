@@ -8,7 +8,7 @@ Accounts.onLogin ->
   _initDropdown()
 
 Template.navbar.helpers
-  syncing: -> _.reduce Services, ((z, s) -> z + State["#{s.id}Syncing"]), 0
+  syncing: -> _.reduce Services, ((z, s) -> z + (State["#{s.id}Syncing"] ? 0)), 0
   syncingName: ->
     for id, {name} of Services
       if State["#{id}Syncing"] then return name
@@ -21,7 +21,7 @@ Template.navbar.events
 
   'click .sync.button': ->
     log.debug "Syncing all services..."
-    Meteor.call 'sync'
+    Meteor.call 'sync', (err, res) -> log.error err if err
 
   'click .logout': ->
     if confirm 'Are you sure you want to logout?'

@@ -1,2 +1,2 @@
 class AutoScalingGroup extends AWSModel
-  @schema: new SimpleSchema(AutoScalingGroupSchema)
+  _type: 'AutoScalingGroup'

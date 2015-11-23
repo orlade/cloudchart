@@ -1,5 +1,5 @@
 Meteor.startup ->
-  AccountsLocal.config({})
+  AccountsLocal?.config({})
 
   Accounts.onCreateUser (options, user) ->
     console.log 'creating', user, options

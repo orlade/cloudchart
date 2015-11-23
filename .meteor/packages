@@ -27,8 +27,8 @@ orlade:aws-collections
 # Accounts
 useraccounts:semantic-ui
 useraccounts:iron-routing
-urbanetic:accounts-local
-digilord:roles
+# urbanetic:accounts-local
+# digilord:roles
 
 # Utilities
 aldeed:autoform

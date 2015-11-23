@@ -5,8 +5,8 @@ Meteor.startup ->
 # Facade for synchronization of AWS services.
 @AwsSync =
   # The services to sync by default.
-  services: [S3Service, EC2Service, ECSSyncService]
-  # services: [S3Service] # For debugging more quickly.
+  services: [S3Service, EC2Service, ECSSyncService, IAMService]
+  # services: [EC2Service] # For debugging more quickly.
 
   # Unsets any existing AWS credentials. The `update` method requires both ID and key be provided
   # and not null.

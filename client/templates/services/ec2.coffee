@@ -4,6 +4,7 @@ Template.ec2.helpers
     # TODO: Display custom form to customise blueprint parameters.
     ecsMicro = Blueprints.EC2LaunchConfigurations.ecsMicro
       ecsConfigPath: 'cloudchart-config/ecs/ecs.config'
+      iamRoleId: IAMRoles.findOne({RoleName: 'ecsInstanceRole'}, {fields: {Arn: true}})?.Arn
 
     [{
       label: "Suggestions"

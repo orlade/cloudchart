@@ -20,9 +20,7 @@
         bucket.website = s3.getBucketWebsiteSync {Bucket: bucket._id}
         hostName = bucket.website.RedirectAllRequestsTo?.HostName ? bucket._id
         bucket.website.url = "http://#{hostName}"
-      catch e
-        log.debug e
-        bucket.website = false
+      catch e then log.debug e
       bucket
     Syncer.sync S3Buckets, buckets, true
     log.debug "Finished syncing S3 buckets"

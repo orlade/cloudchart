@@ -3,7 +3,7 @@ ECS_ROOT_URL = 'https://ap-southeast-2.console.aws.amazon.com/ecs/home?region=ap
 
 Template.ecs.helpers
   installing: -> State.ecsConfigInstalling
-  clusters: -> ECSSyncService.clusters
+  clusters: -> ECSClusters.find()
 
 Template.TaskDefinitionsTemplate.helpers
   taskdefFamilies: -> ECSSyncService.taskdefs
@@ -11,14 +11,15 @@ Template.TaskDefinitionsTemplate.helpers
   manageUrl: -> "#{ECS_ROOT_URL}#/taskDefinitions/#{@family}/#{@revision}"
 
 Template.ECSClusterTemplate.helpers
-  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@clusterArn)}/services"
+  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@_id)}/services"
+  # services: -> ECSServices.find({})
 
 Template.ECSServiceTemplate.helpers
-  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@clusterArn)}/services/#{@name}/tasks"
+  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@_id)}/services/#{@name}/tasks"
   loadBalancerNames: -> _.pluck(@loadBalancerName, 'loadBalancerName').join(', ')
 
 Template.ECSTaskTemplate.helpers
-  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@clusterArn)}/tasks/#{@taskId}"
+  manageUrl: -> "#{ECS_ROOT_URL}#/clusters/#{getClusterName(@_id)}/tasks/#{@taskId}"
 
 
 Template.ecs.events
@@ -29,4 +30,4 @@ Template.ecs.events
 
 # Utility methods
 
-getClusterName = (clusterArn) -> clusterArn.match(/\w+\/(\w+)/)[1]
+getClusterName = (clusterArn) -> clusterArn?.match(/\w+\/(\w+)/)[1]

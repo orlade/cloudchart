@@ -10,8 +10,11 @@
     width: 32px;
     height: 32px;
   }
-  &.ec2 {.offset(0);}
-  &.ecs {.offset(39);}
-  &.s3 {.offset(3);}
 
+  // Spritemap offsets for AWS services.
+  .offset(0); // Default for unknown services.
+  &.ec2 {.offset(0);}
+  &.s3 {.offset(3);}
+  &.iam {.offset(14);}
+  &.ecs {.offset(39);}
 }

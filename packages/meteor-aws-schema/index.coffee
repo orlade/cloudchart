@@ -1,5 +1,8 @@
 schemafy = (name) -> name + 'Schema'
 
+SimpleSchema.extendOptions
+  description: Match.Optional String
+
 AWSModelNames = [
   'AutoScalingGroup'
   'EC2Instance'
@@ -9,6 +12,7 @@ AWSModelNames = [
   'ECSTaskDefinitionFamily'
   'ECSCluster'
   'ECSService'
+  'IAMRole'
   'S3Bucket'
 ]
 AWSSchemaNames = (schemafy(name) for name in AWSModelNames)
