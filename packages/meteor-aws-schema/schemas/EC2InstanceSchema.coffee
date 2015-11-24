@@ -249,7 +249,7 @@ TAG_KEY_MAP =
   'aws:autoscaling:groupName': 'autoscaleGroup'
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'EC2Instance',
+ModelFactory.registerMapping 'EC2Instance',
   InstanceId: '_id'
   PublicIpAddress: 'ip'
   'State.Name': 'status'

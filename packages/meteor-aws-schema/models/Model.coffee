@@ -8,4 +8,4 @@ class AWSModel
 
   constructor: (source) ->
     @userId = Meteor.userId()
-    ModelMapper.merge @, source
+    ModelFactory.merge @, source

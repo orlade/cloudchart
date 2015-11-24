@@ -12,6 +12,7 @@ Package.on_use(function (api) {
 
     'aramk:utility@0.11.0',
     'aldeed:collection2',
+    'matb33:collection-hooks',
     'orlade:aws-schema'
   ]);
 

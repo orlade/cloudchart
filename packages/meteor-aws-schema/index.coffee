@@ -1,5 +1,3 @@
-schemafy = (name) -> name + 'Schema'
-
 SimpleSchema.extendOptions
   description: Match.Optional String
 
@@ -15,16 +13,13 @@ AWSModelNames = [
   'IAMRole'
   'S3Bucket'
 ]
-AWSSchemaNames = (schemafy(name) for name in AWSModelNames)
 
-AWSModels = {}
+schemafy = (name) -> name + 'Schema'
+
+AWSSchemaNames = (schemafy(name) for name in AWSModelNames)
 AWSSchemas = {}
 
 Meteor.startup =>
-  # Index of model class by model name.
-  for name in AWSModelNames
-    AWSModels[name] = @[name]
-
   # Index of schemas by model name.
   for name in AWSModelNames
     AWSSchemas[name] = @[schemafy(name)]

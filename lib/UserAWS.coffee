@@ -9,6 +9,6 @@
   AWS.config.update auth
   ServiceClass = AWS[serviceName]
   log.debug "Creating #{serviceName} service for user #{Meteor.userId()} (#{auth.accessKeyId})"
-  service = new ServiceClass(args...)
+  service = new ServiceClass args...
   AwsSync.resetAuth()
   service

@@ -5,7 +5,7 @@
       check args.iamRoleId, String
       # check args.securityGroupId String
 
-      new EC2LaunchConfiguration
+      ModelFactory.create 'EC2LaunchConfiguration',
         LaunchConfigurationName: "ECS t2.micro"
         BlockDeviceMappings: [{DeviceName: 'xvda', Ebs: VolumeSize: 30}]
         EbsOptimized: false # Maybe true?

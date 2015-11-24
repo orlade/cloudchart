@@ -16,7 +16,7 @@
 
     {Reservations} = ec2.describeInstancesSync()
     Instances = _.flatten _.pluck(Reservations, 'Instances')
-    docs = (new EC2Instance(instance) for instance in Instances)
+    docs = ModelFactory.create 'EC2Instance', Instances
     Syncer.sync EC2Instances, docs, true
     log.debug "Finished syncing EC2 instances"
 

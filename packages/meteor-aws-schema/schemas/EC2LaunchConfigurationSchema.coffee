@@ -27,5 +27,5 @@ for key, value of EC2LaunchConfigurationSchema
   value.optional = true
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'EC2LaunchConfiguration',
+ModelFactory.registerMapping 'EC2LaunchConfiguration',
   LaunchConfigurationName: (lc, name) -> lc._id = lc.name = name

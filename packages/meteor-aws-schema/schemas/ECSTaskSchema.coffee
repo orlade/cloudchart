@@ -1,7 +1,7 @@
 ECSTaskSchema = {}
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'ECSTask',
+ModelFactory.registerMapping 'ECSTask',
   taskArn: (task, arn) ->
     task._id = arn
     task.taskId = _.last arn.split('/')

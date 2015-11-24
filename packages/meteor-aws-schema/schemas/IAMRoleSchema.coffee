@@ -16,5 +16,6 @@ IAMRoleSchema =
     type: String
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'IAMRole',
+ModelFactory.registerMapping 'IAMRole',
+  RoleId: '_id'
   RoleName: 'name'

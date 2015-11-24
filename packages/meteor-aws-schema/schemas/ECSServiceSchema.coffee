@@ -119,7 +119,7 @@ ECSServiceSchema =
     blackbox: true
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'ECSService',
+ModelFactory.registerMapping 'ECSService',
   serviceArn: '_id'
   serviceName: 'name'
   taskDefinition: (service, tdArn) -> service.taskdefName = _.last tdArn.split('/')

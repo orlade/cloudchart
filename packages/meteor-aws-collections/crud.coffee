@@ -31,3 +31,4 @@ ModelCrud =
 CREATE_METHODS:
   S3Bucket: 's3/createBucket'
   EC2LaunchConfiguration: 'ec2/createLaunchConfiguration'
+  IAMRole: 'iam/createRole'

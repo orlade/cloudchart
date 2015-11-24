@@ -14,7 +14,7 @@
 
     {Buckets} = s3.listBucketsSync()
     buckets = for bucket in Buckets
-      bucket = new S3Bucket(bucket)
+      bucket = ModelFactory.create('S3Bucket', bucket)
       # TODO(orlade): Q.all.
       try
         bucket.website = s3.getBucketWebsiteSync {Bucket: bucket._id}

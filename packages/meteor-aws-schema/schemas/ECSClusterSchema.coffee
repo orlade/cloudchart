@@ -45,6 +45,6 @@ ECSClusterSchema =
   #   blackbox: true
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'ECSCluster',
+ModelFactory.registerMapping 'ECSCluster',
   clusterArn: '_id'
   clusterName: 'name'

@@ -16,7 +16,7 @@
 
     {Roles} = iam.listRolesSync()
     log.debug Roles
-    roles = (new IAMRole(role) for role in Roles)
+    roles = (ModelFactory.create('IAMRole', role) for role in Roles)
     Syncer.sync IAMRoles, roles, true
     log.debug "Finished syncing IAM roles"
 

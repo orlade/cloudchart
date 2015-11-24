@@ -2,6 +2,11 @@ global = @
 
 AWSCollections = {}
 
+# Schema fields that are added to all model schemas for internal use.
+COMMON_SCHEMA =
+  _id: {type: String, autoform: {type: 'hidden'}}
+  _type: {type: String, autoform: {type: 'hidden'}}
+
 AWSCollectionsConfig =
   # Initialize the collections using the configuration `options`.
   #
@@ -12,6 +17,12 @@ AWSCollectionsConfig =
   # * `models`: An array of names of models to create collections for. If `null`, collections will
   #   be created for all models.
   configure: (options) ->
+    if options.userId
+      Objects.setModifierProperty COMMON_SCHEMA, options.userId,
+        type: String
+        label: "User ID"
+        autoform: type: 'hidden'
+
     AWSModelNames.forEach (modelName) ->
       if options.models and modelName in options.models then return
 
@@ -21,10 +32,23 @@ AWSCollectionsConfig =
       global[name] = AWSCollections[name] = collection
 
       if SimpleSchema? and AWSSchemas[modelName]
-        schema = AWSSchemas[modelName]
-        schema._id = {type: String}
+        schema = Setter.merge AWSSchemas[modelName], COMMON_SCHEMA
+        schema._id = type: String, autoform: type: 'hidden'
+        schema._type = type: String, autoform: type: 'hidden'
+
         if options.userId
-          Objects.setModifierProperty(schema, options.userId, {type: String, label: "User ID"})
+          Objects.setModifierProperty schema, options.userId,
+            type: String
+            label: "User ID"
+            autoform: type: 'hidden'
+
+          # Ensure the `userId` is set on newly-created models.
+          attachUserId = (doc, delta, userId) ->
+            unless doc?.userId then Objects.setModifierProperty(delta, options.userId, userId)
+
+          collection.before.insert (userId, doc) -> attachUserId(null, doc, userId)
+          collection.before.upsert (userId, sel, mod) -> attachUserId(null, mod, userId)
+
         collection.attachSchema new SimpleSchema(schema)
 
       # Publish on the server, subscribe on the client.

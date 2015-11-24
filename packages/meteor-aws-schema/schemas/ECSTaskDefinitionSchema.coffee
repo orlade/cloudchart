@@ -1,4 +1,4 @@
 ECSTaskDefinitionSchema = {}
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'ECSTaskDefinition', {}
+ModelFactory.registerMapping 'ECSTaskDefinition', {}

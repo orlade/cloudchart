@@ -20,10 +20,10 @@ Template.iam.helpers
   roleSchema: -> new SimpleSchema IAMRoleSchema
 
 Template.iam.events
-  'click .create.role .create.item': -> new IAMRole(@value).create()
+  'click .create.role .create.item': -> ModelFactory.create('IAMRole', @value).create()
 
 Template.CreateMenu.onCreated ->
-  @customHooks['role'] = (formValues, callback) -> new IAMRole(formValues).create(callback)
+  @customHooks['role'] = (formValues, callback) -> ModelFactory.create('IAMRole', formValues).create(callback)
 
 Template.IAMRoleTemplate.helpers
   manageUrl: -> "https://console.aws.amazon.com/iam/home?region=ap-southeast-2#roles/#{@RoleName}"

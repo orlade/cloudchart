@@ -30,22 +30,20 @@ Package.on_use(function (api) {
   ]);
 
   api.export([
-    'ModelMapper',
+    'ModelFactory',
 
     'AWSModelNames',
     'AWSSchemaNames',
-    'AWSModels',
     'AWSSchemas',
 
     'AWSModel'
   ].concat(MODELS, SCHEMAS));
 
   api.add_files([
-    'util/ModelMapper.coffee',
+    'util/ModelFactory.coffee',
 
     'models/Model.coffee'
   ].concat(
-    SCHEMAS.map(function(schema) {return 'schemas/' + schema + '.coffee'}),
-    MODELS.map(function(model) {return 'models/' + model + '.coffee'})
+    SCHEMAS.map(function(schema) {return 'schemas/' + schema + '.coffee'})
   ).concat('index.coffee'));
 });

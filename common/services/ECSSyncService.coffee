@@ -23,7 +23,7 @@
 
       try
         {taskDefinition} = ecs.describeTaskDefinitionSync {taskDefinition: familyName}
-        taskDefinition = new ECSTaskDefinition(taskDefinition)
+        taskDefinition = ModelFactory.create('ECSTaskDefinition', taskDefinition)
         family.revisions[taskDefinition.revision] = taskDefinition
         family.status = taskDefinition.status
       catch err
@@ -38,7 +38,7 @@
     log.debug "Syncing clusters..."
     {clusterArns} = ecs.listClustersSync()
     {clusters} = ecs.describeClustersSync {clusters: clusterArns}
-    clusters = (new ECSCluster(cluster) for cluster in clusters)
+    clusters = ModelFactory.create('ECSCluster', clusters)
 
     # Sync the services of each cluster.
     for cluster in clusters
@@ -46,7 +46,7 @@
       unless serviceArns?.length then continue
 
       {services} = ecs.describeServicesSync {services: serviceArns, cluster: cluster._id}
-      services = (new ECSService(service) for service in services)
+      services = ModelFactory.create('ECSService', services)
 
       # Sync the tasks of each service.
       for service in services
@@ -54,7 +54,7 @@
         unless taskArns?.length then continue
 
         {tasks} = ecs.describeTasksSync {tasks: taskArns, cluster: cluster._id}
-        tasks = (new ECSTask(task) for task in tasks)
+        tasks = ModelFactory.create('ECSTask', tasks)
 
         service.tasks = tasks
       cluster.services = services

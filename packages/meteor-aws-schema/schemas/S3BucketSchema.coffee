@@ -11,5 +11,5 @@ S3BucketSchema =
     optional: true
 
 # TODO: Refactor into schema.
-ModelMapper.registerMapping 'S3Bucket',
+ModelFactory.registerMapping 'S3Bucket',
   Name: (bucket, name) -> bucket._id = bucket.name = name

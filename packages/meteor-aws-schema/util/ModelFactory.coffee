@@ -1,7 +1,13 @@
-ModelMapper =
+ModelFactory =
   # Map of AWS model type to merge transformations. Each transformation is a `{key: value}` pair ,
   # mapping the source name to the preferred destination name.
   _mappings: {}
+
+  # Creates a new model of the `type` from the `source` data. If `source` is an array of source
+  # objects, returns an array of created models.
+  create: (type, source, mapping, options) ->
+    if Types.isArray source then (@create(type, item, mapping, options) for item in source)
+    else @merge({_type: type}, source, mapping, options)
 
   registerMapping: (type, mapping) ->
     if @_mappings[type]? then log.warn "Mapping already registered for #{type}, overwriting..."

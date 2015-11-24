@@ -20,10 +20,10 @@ Template.s3.helpers
   bucketSchema: -> new SimpleSchema {Name: {type: String}}
 
 Template.s3.events
-  'click .create.bucket .create.item': -> new S3Bucket({Name: @label}).create()
+  'click .create.bucket .create.item': -> ModelFactory.create('S3Bucket', {Name: @label}).create()
 
 Template.CreateMenu.onCreated ->
-  @customHooks['bucket'] = (formValues, callback) -> new S3Bucket(formValues).create(callback)
+  @customHooks['bucket'] = (formValues, callback) -> ModelFactory.create('S3Bucket', formValues).create(callback)
 
 Template.S3BucketTemplate.helpers
   manageUrl: -> "https://console.aws.amazon.com/s3/home?region=ap-southeast-2#&bucket=#{@_id}&prefix="
