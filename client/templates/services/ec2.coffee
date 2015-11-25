@@ -1,5 +1,7 @@
 Template.ec2.helpers
   instances: -> EC2Service.instances
+  groups: -> AutoScalingGroups.find()
+
   lcItems: ->
     # TODO: Display custom form to customise blueprint parameters.
     roleArn = IAMRoles.findOne({RoleName: 'ecsInstanceRole'}, {fields: {Arn: true}})?.Arn
@@ -12,8 +14,10 @@ Template.ec2.helpers
       label: "Suggestions"
       items: [{label: ecsMicro.name, icon: 'cube', value: ecsMicro}]
     }]
+    
   lcSchema: -> EC2LaunchConfigurations.simpleSchema()
   asgSchema: -> AutoScalingGroups.simpleSchema()
+  instanceSchema: -> EC2Instances.simpleSchema()
 
 Template.ec2.events
   'click .create.item': -> ModelFactory.create @value

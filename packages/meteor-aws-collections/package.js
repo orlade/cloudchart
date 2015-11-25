@@ -16,7 +16,14 @@ Package.on_use(function (api) {
     'orlade:aws-schema'
   ]);
 
-  api.export(['AWSCollections', 'AWSCollectionsConfig']);
+  api.export([
+    'AWSCollections',
+    'AWSCollectionsConfig'
+  ]);
 
-  api.add_files(['collections.coffee']);
+  api.add_files([
+    'relationships.coffee',
+    'collections.coffee',
+    'crud.coffee'
+  ]);
 });

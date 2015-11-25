@@ -47,7 +47,7 @@ AWSCollectionsConfig =
             unless doc?.userId then Objects.setModifierProperty(delta, options.userId, userId)
 
           collection.before.insert (userId, doc) -> attachUserId(null, doc, userId)
-          collection.before.upsert (userId, sel, mod) -> attachUserId(null, mod, userId)
+          collection.before.upsert (userId, sel, mod) -> attachUserId(null, mod.$set, userId)
 
         collection.attachSchema new SimpleSchema(schema)
 

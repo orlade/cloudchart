@@ -1,10 +1,10 @@
 <template name="ec2">
 
   <div class="ui grid">
-    <div class="eight wide left aligned column">
+    <div class="four wide left aligned column">
       <h1>AWS EC2</h1>
     </div>
-    <div class="eight wide right aligned column">
+    <div class="twelve wide right aligned column">
       <div class="ui secondary menu">
         {{> CreateMenu type="lc" label="Launch Configuration" items=lcItems customSchema=lcSchema}}
         {{> CreateMenu type="asg" label="Auto Scaling Group" items=asgItems customSchema=asgSchema}}
@@ -15,9 +15,63 @@
   </div>
 
   <div class="ui stackable cards">
+    {{#each groups}}
+      {{> AutoScalingGroupTemplate}}
+    {{/each}}
+  </div>
+
+  <div class="ui stackable cards">
     {{#each instances}}
       {{> EC2InstanceTemplate}}
     {{/each}}
+  </div>
+</template>
+
+<template name="AutoScalingGroupTemplate">
+  <div class="{{color}} card">
+    <div class="content">
+      <div class="header">
+        <div>
+          <span class="name">
+            {{#if name}}
+            <span class="name" title="Instance name">{{name}}</span>
+            (<span class="type" title="Instance type">{{InstanceType}}</span>)
+            {{else}}
+            <span class="type" title="Instance type">{{InstanceType}}</span>
+            {{/if}}
+          </span>
+          <a class="ui top right attached mini {{color}} label" title="Status: {{status}}">
+            {{upperCase status}}
+          </a>
+        </div>
+      </div>
+      <div class="meta">
+        <div>
+          <a class="id" href="{{manageUrl}}" title="Manage instance">{{_id}}</a> @
+          <a class="instance" href="http://{{ip}}" title="Visit instance">{{ip}}</a>
+        </div>
+        <div>
+          <span class="availabilityZone" title="Availability zone">
+            {{Placement.AvailabilityZone}}
+          </span>
+        </div>
+        {{#if spot}}
+          <div>
+            <span class="contract" title="Contract type">
+              {{contractType}}{{#if spot}} ${{SpotPrice}}{{/if}})
+            </span>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="extra content">
+      {{#if autoscaleGroup}}
+        <a class="right" href="{{elbUrl}}" target="_blank" title="Parent auto scaling group">
+          <i class="ui signal icon"></i> {{autoscaleGroup}}
+        </a>
+      {{/if}}
+      <div title="Launched on {{LaunchTime}}"><i class="ui wait icon"></i> {{launchedAgo}}</div>
+    </div>
   </div>
 </template>
 
